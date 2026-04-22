@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Microsoft Entra Admin Center – Full Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1e2e;--sidebar-bg:#142338;--sidebar-border:#1e3a55;
+  --hover:#1e3a55;--active-bg:rgba(0,120,212,.18);--active-border:#50e6ff;
+  --text:#e8f4fd;--muted:#8bafc8;--icon:#50e6ff;
+  --panel:#0f1e2e;--panel-border:#1e3a55;
+  --accent:#50e6ff;--gold:#ffd166;
+  --tel-color:#50e6ff;
+  --radius:4px;--font:'Outfit','Noto Sans Telugu',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOP HEADER */
+.topbar{
+  height:48px;
+  background:linear-gradient(135deg,#0078d4 0%,#005a9e 60%,#003a6e 100%);
+  display:flex;align-items:center;
+  padding:0 16px;gap:12px;flex-shrink:0;
+  box-shadow:0 2px 16px rgba(0,120,212,.5);
+  border-bottom:1px solid #50e6ff44;
+}
+.topbar .waffle{font-size:18px;color:white;cursor:pointer}
+.topbar .brand{font-size:15px;font-weight:600;color:white;letter-spacing:.2px}
+.topbar .brand span{opacity:.7;font-weight:400;font-size:13px;margin-left:4px;color:#50e6ff}
+
+/* THREE BUTTONS */
+.btnbar{
+  height:52px;background:#142338;border-bottom:1px solid #1e3a55;
+  display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;
+}
+.btn{
+  display:flex;align-items:center;gap:6px;padding:7px 16px;
+  border:none;border-radius:var(--radius);font-family:var(--font);
+  font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;
+  white-space:nowrap;
+}
+.btn-1{background:#0078d4;color:#fff;box-shadow:0 2px 10px rgba(0,120,212,.4)}
+.btn-1:hover{background:#006cbf;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,120,212,.6)}
+.btn-2{background:transparent;color:#50e6ff;border:1.5px solid #50e6ff}
+.btn-2:hover{background:rgba(80,230,255,.1);transform:translateY(-1px)}
+.btn-3{background:linear-gradient(135deg,#ffd166,#ffb830);color:#1a1a1a;font-weight:600;box-shadow:0 2px 10px rgba(255,209,102,.3)}
+.btn-3:hover{background:linear-gradient(135deg,#ffde88,#ffc84a);transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,209,102,.5)}
+.btn.active-btn{box-shadow:0 0 0 2px #50e6ff,0 0 0 4px rgba(80,230,255,.15)}
+.tel-label{font-family:'Noto Sans Telugu',sans-serif;font-size:11px;opacity:.8}
+
+/* LAYOUT */
+.layout{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{
+  width:252px;min-width:252px;background:#142338;
+  border-right:1px solid #1e3a55;
+  overflow-y:auto;flex-shrink:0;
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:#1e3a55;border-radius:2px}
+
+.nav-top{padding:4px 0 2px}
+.nav-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 12px 7px 16px;cursor:pointer;
+  border-left:2px solid transparent;
+  transition:background .15s,border-color .15s;
+  position:relative;user-select:none;
+}
+.nav-item:hover{background:#1e3a55}
+.nav-item.active{background:rgba(0,120,212,.18);border-left-color:#50e6ff}
+.nav-item .ni{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
+.nav-item .nl{font-size:13px;color:#e8f4fd;flex:1;line-height:1.3}
+.nav-item .nl .tel{display:none;font-family:'Noto Sans Telugu',sans-serif;font-size:11px;color:#50e6ff;line-height:1.4}
+body.tel-on .nav-item .nl .tel{display:block}
+.nav-item .badge{font-size:10px;background:rgba(80,230,255,.15);color:#50e6ff;padding:1px 5px;border-radius:8px;font-weight:500;border:1px solid rgba(80,230,255,.2)}
+.nav-item .chevron{font-size:10px;color:#8bafc8;margin-left:auto;transition:transform .2s}
+.nav-item.open .chevron{transform:rotate(180deg)}
+
+/* Section headers */
+.sec-header{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 12px 6px 10px;cursor:pointer;
+  border-top:1px solid #1e3a55;
+  transition:background .15s;
+}
+.sec-header:hover{background:#1e3a55}
+.sec-header .si{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.sec-header .sl{font-size:13px;font-weight:600;color:#e8f4fd;flex:1}
+.sec-header .sl .tel{display:none;font-family:'Noto Sans Telugu',sans-serif;font-size:11px;color:#50e6ff;font-weight:400}
+body.tel-on .sec-header .sl .tel{display:block}
+.sec-header .chev{font-size:10px;color:#8bafc8;transition:transform .2s}
+.sec-header.open .chev{transform:rotate(0deg)}
+.sec-header.closed .chev{transform:rotate(-90deg)}
+.sec-children{overflow:hidden;transition:max-height .3s ease}
+.sec-children.hidden{max-height:0}
+
+.sub-nav-item{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 12px 6px 36px;cursor:pointer;
+  border-left:2px solid transparent;
+  transition:background .15s;
+}
+.sub-nav-item:hover{background:#1e3a55}
+.sub-nav-item.active{background:rgba(0,120,212,.18);border-left-color:#50e6ff}
+.sub-nav-item .sni{width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.sub-nav-item .snl{font-size:13px;color:#e8f4fd;flex:1;line-height:1.3}
+.sub-nav-item .snl .tel{display:none;font-family:'Noto Sans Telugu',sans-serif;font-size:11px;color:#50e6ff}
+body.tel-on .sub-nav-item .snl .tel{display:block}
+.sub-nav-item .badge{font-size:10px;background:rgba(80,230,255,.12);color:#50e6ff;padding:1px 5px;border-radius:8px;border:1px solid rgba(80,230,255,.2)}
+
+.deep-nav-item{
+  display:flex;align-items:center;gap:8px;
+  padding:5px 12px 5px 52px;cursor:pointer;
+  border-left:2px solid transparent;
+  transition:background .15s;
+}
+.deep-nav-item:hover{background:#1e3a55}
+.deep-nav-item.active{background:rgba(0,120,212,.18);border-left-color:#50e6ff}
+.deep-nav-item .dnl{font-size:12.5px;color:#8bafc8;line-height:1.3}
+.deep-nav-item .dnl .tel{display:none;font-family:'Noto Sans Telugu',sans-serif;font-size:11px;color:#50e6ff}
+body.tel-on .deep-nav-item .dnl .tel{display:block}
+
+.nav-divider{height:1px;background:#1e3a55;margin:4px 0}
+
+/* CONTENT PANEL */
+.content{flex:1;overflow-y:auto;background:#0f1e2e;padding:0}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-thumb{background:#1e3a55;border-radius:3px}
+
+.welcome{padding:32px 36px;max-width:860px;}
+.welcome h1{font-size:26px;font-weight:700;color:#e8f4fd;margin-bottom:4px}
+.welcome .sub{font-size:14px;color:#8bafc8;margin-bottom:28px}
+.welcome .sub .tel{font-family:'Noto Sans Telugu',sans-serif;display:none;margin-top:2px;color:#50e6ff}
+body.tel-on .welcome .sub .tel{display:block}
+
+.overview-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:28px}
+.ov-card{
+  background:#1a2d42;border:1px solid #1e3a55;border-radius:6px;
+  padding:16px;cursor:pointer;transition:all .2s;border-top:3px solid var(--card-color,#0078d4);
+  position:relative;overflow:hidden;
+}
+.ov-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.4);transform:translateY(-3px);border-color:var(--card-color,#0078d4)}
+.ov-card .cc{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.ov-card .cc-icon{font-size:20px;width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ov-card .cc-title{font-size:14px;font-weight:600;color:#e8f4fd;line-height:1.3}
+.ov-card .cc-tel{font-family:'Noto Sans Telugu',sans-serif;font-size:11px;color:#50e6ff;display:none}
+body.tel-on .ov-card .cc-tel{display:block}
+.ov-card .cc-desc{font-size:12.5px;color:#8bafc8;line-height:1.6}
+.ov-card .cc-desc-tel{font-family:'Noto Sans Telugu',sans-serif;font-size:11px;color:#6a93b0;line-height:1.7;display:none;margin-top:4px}
+body.tel-on .ov-card .cc-desc-tel{display:block}
+
+/* Detail view */
+.detail{padding:28px 36px;max-width:860px;display:none}
+.detail.show{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.detail-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px;padding:20px;background:#1a2d42;border:1px solid #1e3a55;border-radius:8px;border-left:4px solid #50e6ff;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.detail-header .dh-icon{font-size:28px;width:52px;height:52px;background:linear-gradient(135deg,#0078d4,#50e6ff33);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(0,120,212,.3)}
+.detail-header .dh-info h2{font-size:20px;font-weight:700;color:#e8f4fd;margin-bottom:2px}
+.detail-header .dh-info .dh-tel{font-family:'Noto Sans Telugu',sans-serif;font-size:13px;color:#50e6ff;margin-bottom:6px;display:none}
+body.tel-on .dh-info .dh-tel{display:block}
+.detail-header .dh-info .dh-path{font-size:11.5px;color:#8bafc8;margin-bottom:8px}
+.detail-header .dh-info .dh-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;background:rgba(80,230,255,.12);color:#50e6ff;letter-spacing:.3px;text-transform:uppercase;border:1px solid rgba(80,230,255,.2)}
+.detail-body{background:#1a2d42;border:1px solid #1e3a55;border-radius:8px;padding:20px;margin-bottom:16px}
+.detail-body h3{font-size:15px;font-weight:600;color:#e8f4fd;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.detail-body .desc-en{font-size:13.5px;color:#c8dff0;line-height:1.7;margin-bottom:12px}
+.detail-body .desc-tel{font-family:'Noto Sans Telugu',sans-serif;font-size:13px;color:#c8dff0;line-height:1.8;display:none;background:rgba(0,120,212,.12);padding:12px;border-radius:6px;border-left:3px solid #50e6ff}
+body.tel-on .detail-body .desc-tel{display:block}
+.sub-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:14px}
+.sub-card{background:#142338;border:1px solid #1e3a55;border-radius:6px;padding:12px;transition:all .2s;cursor:default}
+.sub-card:hover{border-color:#50e6ff;background:#1e3a55;box-shadow:0 2px 12px rgba(80,230,255,.1)}
+.sub-card .sc-title{font-size:13px;font-weight:600;color:#e8f4fd;margin-bottom:3px}
+.sub-card .sc-tel{font-family:'Noto Sans Telugu',sans-serif;font-size:11px;color:#50e6ff;display:none;margin-bottom:3px}
+body.tel-on .sub-card .sc-tel{display:block}
+.sub-card .sc-desc{font-size:12px;color:#8bafc8;line-height:1.5}
+.sub-card .sc-desc-tel{font-family:'Noto Sans Telugu',sans-serif;font-size:11px;color:#6a93b0;display:none;line-height:1.6;margin-top:2px}
+body.tel-on .sub-card .sc-desc-tel{display:block}
+
+/* REAL-WORLD EXAMPLE BLOCKS */
+.ex-label{display:block;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#ffd166;margin-bottom:6px;opacity:.9}
+.ex-scenario{background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.2);border-radius:6px;padding:12px 14px;margin-bottom:10px;font-size:13px;color:#e8f4fd;line-height:1.7}
+.ex-block{background:rgba(80,230,255,.06);border:1px solid rgba(80,230,255,.15);border-radius:6px;padding:12px 14px;margin-bottom:10px;font-size:13px;color:#c8dff0;line-height:1.7}
+.ex-tel{background:rgba(0,120,212,.1);border-color:rgba(80,230,255,.2);font-family:'Noto Sans Telugu',sans-serif;color:#a8d4f0;display:none}
+body.tel-on .ex-tel{display:block}
+.ex-steps{background:rgba(0,178,148,.07);border:1px solid rgba(0,178,148,.2);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+.ex-steps ol{margin-left:18px;font-size:12.5px;color:#c8dff0;line-height:1.9}
+.ex-steps ol li::marker{color:#00b294;font-weight:600}
+.ex-result{background:rgba(0,178,148,.12);border:1px solid rgba(0,178,148,.3);border-radius:6px;padding:10px 14px;font-size:12.5px;color:#7de8d5;font-weight:500}
+.ex-result span{color:#00e6c0;font-weight:700}
+
+/* EXAMPLE BLOCKS */
+.ex-scenario{font-size:13.5px;color:#e8f4fd;background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.2);border-radius:6px;padding:12px 14px;margin-bottom:10px;line-height:1.7}
+.ex-block{font-size:13.5px;color:#c8dff0;line-height:1.7;margin-bottom:10px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid #1e3a55}
+.ex-tel{font-family:'Noto Sans Telugu',sans-serif;font-size:13px;color:#a0c8e8;display:none}
+body.tel-on .ex-tel{display:block}
+.ex-steps{margin-bottom:10px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid #1e3a55}
+.ex-steps ol{padding-left:20px;margin-top:6px}
+.ex-steps ol li{font-size:13px;color:#c8dff0;line-height:1.8;margin-bottom:2px}
+.ex-result{font-size:13px;font-weight:600;color:#7de8d5;background:rgba(0,178,148,.1);border:1px solid rgba(0,178,148,.25);border-radius:6px;padding:10px 14px}
+.ex-result span{color:#50e6ff}
+.ex-label{display:block;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#ffd166;margin-bottom:5px;opacity:.9}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span class="waffle">⊞</span>
+  <span class="brand">Microsoft Entra admin center <span>| యాడ్మిన్ సెంటర్</span></span>
+</div>
+
+<!-- THREE BUTTONS -->
+<div class="btnbar">
+  <button class="btn btn-1 active-btn" id="b1" onclick="setBtn(1)">
+    📋 Overview / అవలోకనం
+  </button>
+  <button class="btn btn-2" id="b2" onclick="setBtn(2);showDetail('entra-overview')">
+    🛡️ Entra ID Guide / మార్గదర్శి
+  </button>
+  <button class="btn btn-3" id="b3" onclick="toggleTelugu()">
+    🔤 తెలుగు చూపు / Hide Telugu
+  </button>
+</div>
+
+<div class="layout">
+<!-- ═══════════════════════════════ SIDEBAR ═══════════════════════════════ -->
+<nav class="sidebar">
+  <div class="nav-top">
+    <div class="nav-item" onclick="showDetail('home')">
+      <span class="ni">🏠</span>
+      <div class="nl">Home <span class="tel">హోమ్</span></div>
+    </div>
+    <div class="nav-item" onclick="showDetail('entra-agents')">
+      <span class="ni">🤖</span>
+      <div class="nl">Entra agents <span class="tel">ఎంట్రా ఏజెంట్లు</span></div>
+    </div>
+  </div>
+
+  <div class="nav-divider"></div>
+
+  <!-- FAVORITES -->
+  <div class="sec-header open" id="fav-hdr" onclick="toggleSection('fav')">
+    <span class="si">⭐</span>
+    <span class="sl">Favorites <span class="tel">ఇష్టమైనవి</span></span>
+    <span class="chev">∨</span>
+  </div>
+  <div class="sec-children" id="fav-body" style="max-height:80px">
+    <div class="sub-nav-item" onclick="showDetail('home')">
+      <span class="sni">🏠</span>
+      <div class="snl">Home <span class="tel">హోమ్</span></div>
+    </div>
+  </div>
+
+  <!-- ENTRA ID -->
+  <div class="sec-header open" id="entraid-hdr" onclick="toggleSection('entraid')">
+    <span class="si" style="color:#0078d4">◆</span>
+    <span class="sl">Entra ID <span class="tel">ఎంట్రా ID</span></span>
+    <span class="chev">∨</span>
+  </div>
+  <div class="sec-children" id="entraid-body" style="max-height:2000px">
+    <div class="sub-nav-item" onclick="showDetail('entra-overview')"><span class="sni">ℹ️</span><div class="snl">Overview <span class="tel">అవలోకనం</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('users')"><span class="sni">👤</span><div class="snl">Users <span class="tel">వినియోగదారులు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('groups')"><span class="sni">👥</span><div class="snl">Groups <span class="tel">గ్రూపులు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('devices')"><span class="sni">💻</span><div class="snl">Devices <span class="tel">పరికరాలు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('agent-id')"><span class="sni">🆔</span><div class="snl">Agent ID (Preview) <span class="tel">ఏజెంట్ ID (ప్రివ్యూ)</span></div><span class="badge">Preview</span></div>
+    <div class="sub-nav-item" onclick="showDetail('enterprise-apps')"><span class="sni">🏢</span><div class="snl">Enterprise apps <span class="tel">ఎంటర్‌ప్రైజ్ యాప్‌లు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('app-registrations')"><span class="sni">📝</span><div class="snl">App registrations <span class="tel">యాప్ నమోదు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('roles-admins')"><span class="sni">🛡️</span><div class="snl">Roles & admins <span class="tel">పాత్రలు & నిర్వాహకులు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('delegated-admin')"><span class="sni">🤝</span><div class="snl">Delegated admin partners <span class="tel">అప్పగించిన నిర్వాహక భాగస్వాములు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('domain-services')"><span class="sni">🌐</span><div class="snl">Domain services <span class="tel">డొమైన్ సేవలు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('identity-secure-score')"><span class="sni">📊</span><div class="snl">Identity Secure Score <span class="tel">గుర్తింపు సురక్షిత స్కోర్</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('auth-methods')"><span class="sni">🔐</span><div class="snl">Authentication methods <span class="tel">ప్రమాణీకరణ పద్ధతులు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('account-recovery')"><span class="sni">🔄</span><div class="snl">Account recovery (Preview) <span class="tel">ఖాతా పునరుద్ధరణ (ప్రివ్యూ)</span></div><span class="badge">Preview</span></div>
+    <div class="sub-nav-item" onclick="showDetail('password-reset')"><span class="sni">🔒</span><div class="snl">Password reset <span class="tel">పాస్‌వర్డ్ రీసెట్</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('custom-security-attrs')"><span class="sni">🏷️</span><div class="snl">Custom security attributes <span class="tel">అనుకూల భద్రత లక్షణాలు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('cert-authorities')"><span class="sni">📜</span><div class="snl">Certificate authorities <span class="tel">సర్టిఫికేట్ అధికారాలు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('external-identities')"><span class="sni">🌍</span><div class="snl">External Identities <span class="tel">బాహ్య గుర్తింపులు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('cross-tenant-sync')"><span class="sni">🔃</span><div class="snl">Cross-tenant synchronization <span class="tel">క్రాస్-టెనెంట్ సమకాలీకరణ</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('entra-connect')"><span class="sni">🔗</span><div class="snl">Entra Connect <span class="tel">ఎంట్రా కనెక్ట్</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('domain-names')"><span class="sni">🏷️</span><div class="snl">Domain names <span class="tel">డొమైన్ పేర్లు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('custom-branding')"><span class="sni">🎨</span><div class="snl">Custom branding <span class="tel">అనుకూల బ్రాండింగ్</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('mobility')"><span class="sni">📱</span><div class="snl">Mobility <span class="tel">మొబిలిటీ</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('monitoring-health')"><span class="sni">❤️</span><div class="snl">Monitoring & health <span class="tel">పర్యవేక్షణ & ఆరోగ్యం</span></div></div>
+  </div>
+
+  <!-- ID GOVERNANCE -->
+  <div class="sec-header open" id="idgov-hdr" onclick="toggleSection('idgov')">
+    <span class="si" style="color:#107c10">⚖️</span>
+    <span class="sl">ID Governance <span class="tel">ID పాలన</span></span>
+    <span class="chev">∨</span>
+  </div>
+  <div class="sec-children" id="idgov-body" style="max-height:500px">
+    <div class="sub-nav-item" onclick="showDetail('idgov-dashboard')"><span class="sni">📊</span><div class="snl">Dashboard <span class="tel">డ్యాష్‌బోర్డ్</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('entitlement-mgmt')"><span class="sni">🎫</span><div class="snl">Entitlement management <span class="tel">అర్హత నిర్వహణ</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('access-reviews')"><span class="sni">🔍</span><div class="snl">Access reviews <span class="tel">యాక్సెస్ సమీక్షలు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('pim')"><span class="sni">👑</span><div class="snl">Privileged Identity Management <span class="tel">అధికార గుర్తింపు నిర్వహణ</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('lifecycle-workflows')"><span class="sni">🔄</span><div class="snl">Lifecycle workflows <span class="tel">జీవితకాల వర్క్‌ఫ్లోలు</span></div></div>
+  </div>
+
+  <!-- VERIFIED ID -->
+  <div class="sec-header open" id="verid-hdr" onclick="toggleSection('verid')">
+    <span class="si" style="color:#0078d4">✅</span>
+    <span class="sl">Verified ID <span class="tel">ధృవీకృత ID</span></span>
+    <span class="chev">∨</span>
+  </div>
+  <div class="sec-children" id="verid-body" style="max-height:300px">
+    <div class="sub-nav-item" onclick="showDetail('verid-overview')"><span class="sni">ℹ️</span><div class="snl">Overview <span class="tel">అవలోకనం</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('credentials')"><span class="sni">🎫</span><div class="snl">Credentials <span class="tel">ప్రమాణపత్రాలు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('org-settings')"><span class="sni">⚙️</span><div class="snl">Organization settings <span class="tel">సంస్థ సెట్టింగులు</span></div></div>
+  </div>
+
+  <!-- GLOBAL SECURE ACCESS -->
+  <div class="sec-header open" id="gsa-hdr" onclick="toggleSection('gsa')">
+    <span class="si" style="color:#0078d4">🌐</span>
+    <span class="sl">Global Secure Access <span class="tel">గ్లోబల్ సెక్యూర్ యాక్సెస్</span></span>
+    <span class="chev">∨</span>
+  </div>
+  <div class="sec-children" id="gsa-body" style="max-height:1200px">
+    <div class="sub-nav-item" onclick="showDetail('gsa-dashboard')"><span class="sni">📊</span><div class="snl">Dashboard <span class="tel">డ్యాష్‌బోర్డ్</span></div></div>
+    <!-- Applications sub-group -->
+    <div class="sub-nav-item"><span class="sni">📦</span><div class="snl">Applications <span class="tel">అప్లికేషన్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('quick-access')"><div class="dnl">Quick Access <span class="tel">శీఘ్ర యాక్సెస్</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('app-discovery')"><div class="dnl">Application discovery <span class="tel">అప్లికేషన్ ఆవిష్కరణ</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('gsa-enterprise-apps')"><div class="dnl">Enterprise applications <span class="tel">ఎంటర్‌ప్రైజ్ అప్లికేషన్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('insights-analytics')"><div class="dnl">Insights & Analytics <span class="tel">అంతర్దృష్టులు & విశ్లేషణలు</span></div></div>
+    <!-- Connect sub-group -->
+    <div class="sub-nav-item"><span class="sni">🔌</span><div class="snl">Connect <span class="tel">కనెక్ట్</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('traffic-forwarding')"><div class="dnl">Traffic forwarding <span class="tel">ట్రాఫిక్ ఫార్వార్డింగ్</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('client-download')"><div class="dnl">Client download <span class="tel">క్లయింట్ డౌన్‌లోడ్</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('remote-networks')"><div class="dnl">Remote networks <span class="tel">రిమోట్ నెట్‌వర్క్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('private-networks')"><div class="dnl">Private networks <span class="tel">ప్రైవేట్ నెట్‌వర్క్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('connectors-sensors')"><div class="dnl">Connectors and sensors <span class="tel">కనెక్టర్లు మరియు సెన్సర్లు</span></div></div>
+    <!-- Secure sub-group -->
+    <div class="sub-nav-item"><span class="sni">🔐</span><div class="snl">Secure <span class="tel">భద్రత</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('security-profiles')"><div class="dnl">Security profiles <span class="tel">భద్రత ప్రొఫైల్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('cloud-firewall')"><div class="dnl">Cloud firewall policies <span class="tel">క్లౌడ్ ఫైర్‌వాల్ విధానాలు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('web-content-filtering')"><div class="dnl">Web content filtering policies <span class="tel">వెబ్ కంటెంట్ ఫిల్టరింగ్ విధానాలు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('file-policies')"><div class="dnl">File policies (Preview) <span class="tel">ఫైల్ విధానాలు (ప్రివ్యూ)</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('prompt-policies')"><div class="dnl">Prompt policies (Preview) <span class="tel">ప్రాంప్ట్ విధానాలు (ప్రివ్యూ)</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('threat-protection')"><div class="dnl">Threat Protection policies <span class="tel">బెదిరింపు రక్షణ విధానాలు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('dlp')"><div class="dnl">Data Loss Prevention policies <span class="tel">డేటా నష్ట నివారణ విధానాలు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('tls-inspection')"><div class="dnl">TLS inspection policies <span class="tel">TLS తనిఖీ విధానాలు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('threat-intel')"><div class="dnl">Threat intelligence policies <span class="tel">బెదిరింపు నిఘా విధానాలు</span></div></div>
+    <!-- Monitor sub-group -->
+    <div class="sub-nav-item"><span class="sni">📡</span><div class="snl">Monitor <span class="tel">పర్యవేక్షించు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('traffic-logs')"><div class="dnl">Traffic logs <span class="tel">ట్రాఫిక్ లాగ్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('gen-ai-logs')"><div class="dnl">Gen AI Insights logs <span class="tel">Gen AI అంతర్దృష్టి లాగ్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('audit-logs')"><div class="dnl">Audit logs <span class="tel">ఆడిట్ లాగ్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('alerts')"><div class="dnl">Alerts <span class="tel">హెచ్చరికలు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('client-events')"><div class="dnl">Client events <span class="tel">క్లయింట్ ఈవెంట్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('deployment-logs')"><div class="dnl">Deployment logs <span class="tel">డిప్లాయ్‌మెంట్ లాగ్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('m365-logs')"><div class="dnl">Enriched Microsoft 365 logs <span class="tel">మెరుగుపడిన M365 లాగ్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('remote-health-logs')"><div class="dnl">Remote network health logs <span class="tel">రిమోట్ నెట్‌వర్క్ ఆరోగ్య లాగ్‌లు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('workbooks')"><div class="dnl">Workbooks <span class="tel">వర్క్‌బుక్‌లు</span></div></div>
+    <!-- Settings sub-group -->
+    <div class="sub-nav-item"><span class="sni">⚙️</span><div class="snl">Settings <span class="tel">సెట్టింగులు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('session-mgmt')"><div class="dnl">Session management <span class="tel">సెషన్ నిర్వహణ</span></div></div>
+    <!-- Third Party -->
+    <div class="sub-nav-item"><span class="sni">🔒</span><div class="snl">Third Party Security Solutions <span class="tel">థర్డ్ పార్టీ భద్రత పరిష్కారాలు</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('get-started')"><div class="dnl">Get Started <span class="tel">ప్రారంభించండి</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('marketplace')"><div class="dnl">Marketplace <span class="tel">మార్కెట్‌ప్లేస్</span></div></div>
+    <div class="deep-nav-item" onclick="showDetail('offers')"><div class="dnl">Offers <span class="tel">ఆఫర్‌లు</span></div></div>
+  </div>
+
+  <div class="nav-divider"></div>
+
+  <!-- BOTTOM items -->
+  <div class="nav-item" onclick="showDetail('whats-new')"><span class="ni">🆕</span><div class="nl">What's new <span class="tel">కొత్తగా వచ్చినవి</span></div></div>
+
+  <!-- BILLING -->
+  <div class="sec-header open" id="billing-hdr" onclick="toggleSection('billing')">
+    <span class="si" style="color:#107c10">💳</span>
+    <span class="sl">Billing <span class="tel">బిల్లింగ్</span></span>
+    <span class="chev">∨</span>
+  </div>
+  <div class="sec-children" id="billing-body" style="max-height:200px">
+    <div class="sub-nav-item" onclick="showDetail('licenses')"><span class="sni">📄</span><div class="snl">Licenses <span class="tel">లైసెన్స్‌లు</span></div></div>
+    <div class="sub-nav-item" onclick="showDetail('trials')"><span class="sni">🧪</span><div class="snl">Trials <span class="tel">ట్రయల్‌లు</span></div></div>
+  </div>
+
+  <div class="nav-item" onclick="showDetail('diagnose')"><span class="ni">🔧</span><div class="nl">Diagnose & solve problems <span class="tel">నిర్ధారించు & సమస్యలు పరిష్కరించు</span></div></div>
+  <div class="nav-item" onclick="showDetail('support')"><span class="ni">💬</span><div class="nl">New support request <span class="tel">కొత్త మద్దతు అభ్యర్థన</span></div></div>
+</nav>
+
+<!-- ═══════════════════════════════ CONTENT ═══════════════════════════════ -->
+<div class="content" id="mainContent">
+
+  <!-- WELCOME / OVERVIEW -->
+  <div class="welcome" id="view-welcome">
+    <h1>Microsoft Entra Admin Center</h1>
+    <div class="sub">
+      Complete UI Guide — Every Menu Explained
+      <div class="tel">పూర్తి UI గైడ్ — ప్రతి మెనూ వివరించబడింది</div>
+    </div>
+    <div class="overview-cards">
+      <div class="ov-card" style="--card-color:#0078d4" onclick="showDetail('entra-overview')">
+        <div class="cc"><div class="cc-icon">◆</div><div><div class="cc-title">Entra ID</div><div class="cc-tel">ఎంట్రా ID</div></div></div>
+        <div class="cc-desc">Identity & access management — users, groups, apps, devices.</div>
+        <div class="cc-desc-tel">గుర్తింపు & యాక్సెస్ నిర్వహణ — వినియోగదారులు, గ్రూపులు, యాప్‌లు, పరికరాలు.</div>
+      </div>
+      <div class="ov-card" style="--card-color:#107c10" onclick="showDetail('idgov-dashboard')">
+        <div class="cc"><div class="cc-icon">⚖️</div><div><div class="cc-title">ID Governance</div><div class="cc-tel">ID పాలన</div></div></div>
+        <div class="cc-desc">Access reviews, entitlements, PIM, lifecycle workflows.</div>
+        <div class="cc-desc-tel">యాక్సెస్ సమీక్షలు, అర్హతలు, PIM, జీవితకాల వర్క్‌ఫ్లోలు.</div>
+      </div>
+      <div class="ov-card" style="--card-color:#0078d4" onclick="showDetail('verid-overview')">
+        <div class="cc"><div class="cc-icon">✅</div><div><div class="cc-title">Verified ID</div><div class="cc-tel">ధృవీకృత ID</div></div></div>
+        <div class="cc-desc">Decentralized identity credentials & organization settings.</div>
+        <div class="cc-desc-tel">వికేంద్రీకృత గుర్తింపు ప్రమాణపత్రాలు & సంస్థ సెట్టింగులు.</div>
+      </div>
+      <div class="ov-card" style="--card-color:#005a9e" onclick="showDetail('gsa-dashboard')">
+        <div class="cc"><div class="cc-icon">🌐</div><div><div class="cc-title">Global Secure Access</div><div class="cc-tel">గ్లోబల్ సెక్యూర్ యాక్సెస్</div></div></div>
+        <div class="cc-desc">Zero-trust network access, policies, monitoring, and connectors.</div>
+        <div class="cc-desc-tel">జీరో-ట్రస్ట్ నెట్‌వర్క్ యాక్సెస్, విధానాలు, పర్యవేక్షణ.</div>
+      </div>
+      <div class="ov-card" style="--card-color:#ffb900" onclick="showDetail('licenses')">
+        <div class="cc"><div class="cc-icon">💳</div><div><div class="cc-title">Billing</div><div class="cc-tel">బిల్లింగ్</div></div></div>
+        <div class="cc-desc">Manage licenses and trials for your Microsoft Entra subscription.</div>
+        <div class="cc-desc-tel">మీ Microsoft Entra సభ్యత్వానికి లైసెన్స్‌లు మరియు ట్రయల్‌లు నిర్వహించండి.</div>
+      </div>
+      <div class="ov-card" style="--card-color:#d13438" onclick="showDetail('diagnose')">
+        <div class="cc"><div class="cc-icon">🔧</div><div><div class="cc-title">Support</div><div class="cc-tel">మద్దతు</div></div></div>
+        <div class="cc-desc">Diagnose & solve problems, raise new support requests.</div>
+        <div class="cc-desc-tel">సమస్యలు నిర్ధారించు, కొత్త మద్దతు అభ్యర్థనలు సృష్టించు.</div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#8bafc8;background:rgba(80,230,255,.06);border:1px solid rgba(80,230,255,.15);border-radius:6px;padding:10px 14px;border-left:3px solid #50e6ff">💡 Click any sidebar item or card above to see a detailed explanation in English & Telugu.<br><span style="font-family:'Noto Sans Telugu',sans-serif;color:#50e6ff">ఏదైనా సైడ్‌బార్ అంశాన్ని క్లిక్ చేయండి లేదా పై కార్డ్‌లు నొక్కండి.</span></p>
+  </div>
+
+  <!-- DETAIL PANELS (all hidden by default) -->
+  <div id="detailContainer" style="display:none;padding:28px 36px;max-width:860px"></div>
+
+</div><!-- end content -->
+</div><!-- end layout -->
+
+<script>
+// ── DATA: all menu items with real-world examples ──
+const DATA = {
+  home:{icon:'🏠',title:'Home',tel:'హోమ్',path:'Microsoft Entra admin center > Home',tag:'Navigation',
+    en:'The Home page is your landing page for the Microsoft Entra admin center. It provides quick access tiles to recently visited resources, common tasks, and tenant information such as your directory name, tenant ID, and subscription details.',
+    te:'హోమ్ పేజీ Microsoft Entra admin center కోసం మీ ల్యాండింగ్ పేజీ. ఇది ఇటీవల సందర్శించిన వనరులు, సాధారణ పనులు మరియు మీ డైరెక్టరీ పేరు, టెనెంట్ ID, సభ్యత్వ వివరాలు వంటి టెనెంట్ సమాచారానికి శీఘ్ర యాక్సెస్ టైల్‌లను అందిస్తుంది.',
+    subs:[],
+    ex:{scenario:'<b>Infosys IT Admin – Hyderabad Office.</b> Ravi, the Entra admin at Infosys, starts his morning by opening the Entra Home page. He instantly sees 3 alerts, his tenant name "infosys.onmicrosoft.com", 12,400 active users, and tiles for Users, Groups, and Conditional Access he visited yesterday.',use:'The Home dashboard helps Ravi jump directly to any section without navigating menus. He clicks the "Risky sign-ins" tile and sees 2 suspicious logins from an unknown country.',tel:'ఇన్ఫోసిస్ IT అడ్మిన్ రవి హోమ్ పేజీ తెరవగానే — 3 హెచ్చరికలు, 12,400 క్రియాశీల వినియోగదారులు మరియు నిన్న సందర్శించిన మెనూలకు శీఘ్ర లింకులు కనిపిస్తాయి. ఇది IT అడ్మిన్ పని వేగంగా చేయడానికి సహాయపడుతుంది.',result:'Ravi detects and investigates a suspicious login from Romania within 30 seconds of opening Entra — no navigation needed.'}},
+  'entra-agents':{icon:'🤖',title:'Entra agents',tel:'ఎంట్రా ఏజెంట్లు',path:'Microsoft Entra admin center > Entra agents',tag:'AI Agents',
+    en:'Entra agents are AI-powered automation tools that can perform identity-related tasks autonomously — such as provisioning users, reviewing access, or responding to security signals — using Microsoft\'s Copilot platform.',
+    te:'ఎంట్రా ఏజెంట్లు AI-ఆధారిత ఆటోమేషన్ సాధనాలు, ఇవి స్వయంచాలకంగా గుర్తింపు సంబంధిత పనులు చేయగలవు — వినియోగదారులను provisioning చేయడం, యాక్సెస్ సమీక్షించడం, భద్రత సంకేతాలకు స్పందించడం.',
+    subs:[],
+    ex:{scenario:'<b>TCS (Tata Consultancy Services) – 600,000 employees worldwide.</b> The IT team gets 800+ new joiner requests every week. Manually creating accounts, assigning licenses, and adding groups took 2–3 days.',use:'TCS deployed an Entra Agent that monitors the HR system. The moment a new hire record appears, the agent auto-creates the Entra account, assigns an M365 E3 license, adds the user to the correct department group, and sends a welcome email — all within 10 minutes.',tel:'TCS లో ప్రతి వారం 800+ కొత్త ఉద్యోగులు చేరతారు. Entra Agent HR సిస్టమ్‌ను పర్యవేక్షించి, కొత్త రికార్డు కనుగొన్న వెంటనే స్వయంచాలకంగా ఖాతా సృష్టించి, లైసెన్స్ కేటాయించి, గ్రూప్‌కు జోడించి, స్వాగత ఇమెయిల్ పంపుతుంది.',result:'Onboarding time reduced from 2–3 days to 10 minutes. Zero manual IT tickets for account creation.'}},
+  'entra-overview':{icon:'ℹ️',title:'Overview',tel:'అవలోకనం',path:'Entra ID > Overview',tag:'Entra ID',
+    en:'The Entra ID Overview gives you a high-level dashboard of your Azure Active Directory tenant. It shows tenant information (name, ID, domain), active users count, recent activity, license summary, and links to common configuration tasks.',
+    te:'Entra ID అవలోకనం మీ Azure Active Directory టెనెంట్ యొక్క అధిక స్థాయి డ్యాష్‌బోర్డ్ ఇస్తుంది. ఇది టెనెంట్ సమాచారం (పేరు, ID, డొమైన్), క్రియాశీల వినియోగదారుల సంఖ్య, ఇటీవలి కార్యాచరణ, లైసెన్స్ సారాంశం చూపిస్తుంది.',
+    subs:[],
+    ex:{scenario:'<b>Apollo Hospitals – Chennai, India.</b> The IT Director needs to present a monthly compliance report to the CISO showing the current state of their Azure AD tenant.',use:'She opens Entra ID Overview and immediately screenshots the tenant health: 8,200 users, 3 verified domains (apollohospitals.com), 98 licensed apps, and 0 service health incidents. It becomes the opening slide of her compliance report.',tel:'అపోలో హాస్పిటల్స్ IT డైరెక్టర్ నెలవారీ నివేదిక కోసం Entra ID అవలోకనం తెరిచి — 8,200 వినియోగదారులు, 3 ధృవీకృత డొమైన్‌లు, 98 లైసెన్స్ పొందిన యాప్‌లు చూపించే స్క్రీన్‌షాట్ తీసుకుంటుంది.',result:'A complete tenant health snapshot in under 60 seconds — no complex reports needed.'}},
+  users:{icon:'👤',title:'Users',tel:'వినియోగదారులు',path:'Entra ID > Users',tag:'Identity',
+    en:'Manage all user accounts in your directory. Create new users (member or guest), bulk import via CSV, reset passwords, assign licenses, configure MFA, review sign-in logs, and manage user properties like job title, department, and manager.',
+    te:'మీ డైరెక్టరీలోని అన్ని వినియోగదారు ఖాతాలను నిర్వహించండి. కొత్త వినియోగదారులను సృష్టించండి (సభ్యుడు లేదా అతిథి), CSV ద్వారా బల్క్ దిగుమతి, పాస్‌వర్డ్‌లు రీసెట్ చేయండి, లైసెన్స్‌లు కేటాయించండి, MFA కాన్ఫిగర్ చేయండి.',
+    subs:[{t:'All Users',tt:'అన్ని వినియోగదారులు',d:'Complete list of all member and guest users in the tenant.',dt:'టెనెంట్‌లోని అన్ని సభ్యుడు మరియు అతిథి వినియోగదారుల పూర్తి జాబితా.'},{t:'New User',tt:'నూతన వినియోగదారుడు',d:'Create a new internal user or invite an external guest.',dt:'కొత్త అంతర్గత వినియోగదారుని సృష్టించండి లేదా బాహ్య అతిథిని ఆహ్వానించండి.'},{t:'Bulk operations',tt:'బల్క్ కార్యకలాపాలు',d:'Create, invite, or delete multiple users at once via CSV upload.',dt:'CSV అప్‌లోడ్ ద్వారా ఒకేసారి అనేక మంది వినియోగదారులను సృష్టించండి, ఆహ్వానించండి లేదా తొలగించండి.'},{t:'Sign-in logs',tt:'సైన్-ఇన్ లాగ్‌లు',d:'Review authentication events — success, failure, location, device, MFA status.',dt:'ప్రమాణీకరణ ఈవెంట్‌లు సమీక్షించండి — విజయం, వైఫల్యం, స్థానం, పరికరం, MFA స్థితి.'}],
+    ex:{scenario:'<b>Wipro Technologies – New Batch of 300 Campus Recruits, Bangalore.</b> HR confirms 300 freshers joining on June 1st and sends a filled Excel sheet with names, emails, departments, and manager names.',use:'The IT admin goes to Users → Bulk Operations → Bulk Create, uploads the CSV, and all 300 accounts are created in one shot. Each user gets their @wipro.com email, M365 license, and is placed in the "Freshers-2025" group.',tel:'విప్రో HR 300 మంది fresher వివరాలతో Excel పంపింది. IT అడ్మిన్ Users → Bulk Create లో CSV అప్‌లోడ్ చేయగా — 300 ఖాతాలు, 300 ఇమెయిల్‌లు, 300 లైసెన్స్‌లు ఒకే సారి సృష్టించబడ్డాయి.',steps:['Download bulk create CSV template from Users → Bulk operations','Fill template with 300 rows of employee data','Upload CSV — Entra validates and creates all accounts','Assign M365 E3 licenses via group-based licensing','New joiners receive welcome email with temp passwords'],result:'300 users onboarded in 8 minutes. Zero individual account creation tickets raised.'}},
+  groups:{icon:'👥',title:'Groups',tel:'గ్రూపులు',path:'Entra ID > Groups',tag:'Identity',
+    en:'Create and manage Security groups (for access control) and Microsoft 365 groups (for collaboration with shared mailbox, SharePoint, Teams). Use dynamic membership rules to auto-add users based on attributes. Assign roles and application access to groups.',
+    te:'Security గ్రూపులు (యాక్సెస్ నియంత్రణ కోసం) మరియు Microsoft 365 గ్రూపులు (భాగస్వామ్య మెయిల్‌బాక్స్, SharePoint, Teams తో సహకారం కోసం) సృష్టించండి. లక్షణాల ఆధారంగా వినియోగదారులను స్వయంచాలకంగా జోడించడానికి డైనమిక్ సభ్యత్వ నిబంధనలు ఉపయోగించండి.',
+    subs:[{t:'Security Groups',tt:'సెక్యూరిటీ గ్రూపులు',d:'Control access to resources. Assign permissions to the group instead of individuals.',dt:'వనరులకు యాక్సెస్‌ను నియంత్రించండి. వ్యక్తులకు బదులు గ్రూప్‌కు అనుమతులు కేటాయించండి.'},{t:'Microsoft 365 Groups',tt:'Microsoft 365 గ్రూపులు',d:'Collaboration groups with shared mailbox, Teams, SharePoint, calendar.',dt:'భాగస్వామ్య మెయిల్‌బాక్స్, Teams, SharePoint, క్యాలెండర్‌తో సహకార గ్రూపులు.'},{t:'Dynamic membership',tt:'డైనమిక్ సభ్యత్వం',d:'Rules-based auto-assignment of users using attributes like department or location.',dt:'విభాగం లేదా స్థానం వంటి లక్షణాలను ఉపయోగించి నిబంధనల ఆధారిత స్వయంచాలక కేటాయింపు.'}],
+    ex:{scenario:'<b>HDFC Bank – Finance & IT Departments with 15,000 employees.</b> Every Finance employee must have access to SAP Finance module. Every time a new person joins Finance, someone had to manually add them to the SAP access group.',use:'HDFC created a Dynamic Security Group called "GRP-Finance-SAP" with the rule: <i>department = "Finance"</i>. Now when any user\'s department attribute is set to Finance (by HR or IT), they are automatically added to the group — and removed when they leave Finance.',tel:'HDFC బ్యాంక్ "GRP-Finance-SAP" అనే డైనమిక్ గ్రూప్ సృష్టించింది. నిబంధన: department = "Finance". Finance విభాగంలో చేరిన వెంటనే వినియోగదారు స్వయంచాలకంగా SAP యాక్సెస్ పొందుతారు. Finance వదిలిపోతే యాక్సెస్ స్వయంచాలకంగా తొలగించబడుతుంది.',steps:['Create new Dynamic Security Group "GRP-Finance-SAP"','Set dynamic rule: (user.department -eq "Finance")','Assign this group to SAP Finance enterprise app','HR sets "Finance" as department for new joiners in HR system','Entra syncs → user auto-added to group → auto-gets SAP access'],result:'Zero manual group management. 100% accurate access. Compliance audit passed with no exceptions.'}},
+  devices:{icon:'💻',title:'Devices',tel:'పరికరాలు',path:'Entra ID > Devices',tag:'Device Management',
+    en:'Manage devices registered or joined to Entra ID. View Azure AD Joined, Hybrid AD Joined, and registered devices. Configure device compliance policies, enable/disable devices, and view BitLocker recovery keys. Integrates with Microsoft Intune for MDM.',
+    te:'Entra ID లో నమోదు చేసిన లేదా చేరిన పరికరాలను నిర్వహించండి. Azure AD Joined, Hybrid AD Joined మరియు నమోదిత పరికరాలను చూడండి. పరికర సమ్మతి విధానాలు కాన్ఫిగర్ చేయండి, BitLocker రికవరీ కీలు చూడండి.',
+    subs:[],
+    ex:{scenario:'<b>Reliance Industries – Employee Laptop Stolen at Mumbai Airport.</b> An employee calls IT: "My work laptop was stolen at the airport. It has access to our SAP systems."',use:'The IT admin opens Entra ID → Devices, finds the laptop, clicks "Disable" to block sign-in immediately. They retrieve the BitLocker recovery key (escrowed in Entra) confirming encryption. Then trigger remote wipe via Intune.',tel:'రిలయన్స్ ఇండస్ట్రీస్ లాప్‌టాప్ చోరీ అయింది. IT అడ్మిన్ Entra Devices లో "Disable" క్లిక్ చేసిన 3 నిమిషాలలో — ఆ లాప్‌టాప్‌తో ఎవరూ సైన్ ఇన్ చేయలేరు. BitLocker డేటాను రక్షిస్తుంది.',steps:['Entra ID → Devices → search by device name or user','Select device → click Disable (immediate effect)','Copy BitLocker key to verify encryption active','Trigger Intune remote wipe for full data erasure','File incident report with device serial and Entra device ID'],result:'Stolen laptop locked within 3 minutes. No data breach. Compliance satisfied.'}},
+  'agent-id':{icon:'🆔',title:'Agent ID (Preview)',tel:'ఏజెంట్ ID (ప్రివ్యూ)',path:'Entra ID > Agent ID (Preview)',tag:'Preview',
+    en:'Agent ID (Preview) enables identity management for AI agents and non-human workloads. Assign managed identities to AI agents so they can securely authenticate to Azure services without storing credentials in code.',
+    te:'Agent ID (ప్రివ్యూ) AI ఏజెంట్లు మరియు మానవేతర వర్క్‌లోడ్‌లకు గుర్తింపు నిర్వహణను ప్రారంభిస్తుంది. AI ఏజెంట్లకు నిర్వహించిన గుర్తింపులు కేటాయించండి, తద్వారా అవి కోడ్‌లో credentials నిల్వ చేయకుండా Azure సేవలకు సురక్షితంగా ప్రమాణీకరించగలవు.',
+    subs:[],
+    ex:{scenario:'<b>Swiggy – AI Order Processing Bot, Bangalore.</b> Swiggy built an AI agent that processes restaurant partner onboarding — reading contracts from SharePoint, updating Dynamics 365, and sending emails. Hardcoded passwords in bot code are a security risk.',use:'Using Agent ID, the bot gets a Managed Identity. It authenticates to SharePoint, Dynamics 365, and Exchange using its identity — no passwords ever in code. Every access is logged in Entra audit logs.',tel:'స్విగ్గీ AI బాట్ రెస్టారెంట్ onboarding నిర్వహిస్తుంది. Agent ID వల్ల కోడ్‌లో పాస్‌వర్డ్‌లు లేకుండా SharePoint, Dynamics 365 సురక్షితంగా యాక్సెస్ అవుతుంది.',result:'Zero hardcoded credentials. Full audit trail. Security team approved for production.'}},
+  'enterprise-apps':{icon:'🏢',title:'Enterprise apps',tel:'ఎంటర్‌ప్రైజ్ యాప్‌లు',path:'Entra ID > Enterprise apps',tag:'Applications',
+    en:'Manage pre-integrated third-party SaaS applications (Salesforce, Dropbox, Zoom, ServiceNow, etc.). Configure Single Sign-On (SAML/OIDC), automated user provisioning via SCIM, and app-based Conditional Access policies.',
+    te:'ముందే అనుసంధానించబడిన థర్డ్-పార్టీ SaaS అప్లికేషన్‌లు నిర్వహించండి. Single Sign-On (SAML/OIDC), SCIM ద్వారా స్వయంచాలక వినియోగదారు provisioning కాన్ఫిగర్ చేయండి.',
+    subs:[{t:'Single Sign-On (SSO)',tt:'సింగిల్ సైన్-ఆన్',d:'Configure SAML 2.0, OIDC, or password-based SSO for any application.',dt:'SAML 2.0, OIDC లేదా పాస్‌వర్డ్-ఆధారిత SSO కాన్ఫిగర్ చేయండి.'},{t:'User provisioning (SCIM)',tt:'వినియోగదారు provisioning',d:'Automatically create/update/disable users in third-party apps.',dt:'SCIM ద్వారా థర్డ్-పార్టీ యాప్‌లలో వినియోగదారులు స్వయంచాలకంగా నిర్వహించబడతారు.'},{t:'App permissions',tt:'యాప్ అనుమతులు',d:'Review and grant admin consent for API permissions.',dt:'API అనుమతులకు అడ్మిన్ సమ్మతి మంజూరు చేయండి.'}],
+    ex:{scenario:'<b>Deloitte India – 50,000 employees using Salesforce, ServiceNow, Zoom, and Workday.</b> Previously employees had separate passwords for each app. IT manually created accounts in each system for every new joiner.',use:'Deloitte configured SSO for all 4 apps. Employees click any app in MyApps portal → auto signed in with their Deloitte Microsoft credentials. When staff leave, disabling Entra account auto-disables them in all 4 apps via SCIM.',tel:'డెలాయిట్ ఇండియాలో SSO కాన్ఫిగర్ చేసిన తర్వాత — ఒకే Microsoft లాగిన్‌తో Salesforce, ServiceNow, Zoom, Workday అన్నీ యాక్సెస్ చేయవచ్చు. ఉద్యోగి వెళ్ళిపోతే ఒక్క క్లిక్‌తో అన్ని 4 యాప్‌లలో యాక్సెస్ తొలగిపోతుంది.',result:'Password reset helpdesk tickets down 70%. Full offboarding from all systems in under 2 minutes.'}},
+  'app-registrations':{icon:'📝',title:'App registrations',tel:'యాప్ నమోదు',path:'Entra ID > App registrations',tag:'Applications',
+    en:'Register your own custom applications to use Entra ID for authentication and authorization. Configure OAuth 2.0 scopes, API permissions, client secrets, certificates, and redirect URIs.',
+    te:'మీ స్వంత అనుకూల అప్లికేషన్‌లను Entra ID తో ప్రమాణీకరించడానికి నమోదు చేయండి. OAuth 2.0 స్కోప్‌లు, client secrets కాన్ఫిగర్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>Zepto (Quick Commerce startup, Mumbai) – Building internal Employee Portal "ZeptoConnect".</b> Zepto\'s devs built a custom React app for HR, payroll, and scheduling. They want employees to log in using existing @zepto.com Microsoft accounts — no new passwords.',use:'Developer registers "ZeptoConnect" in App Registrations, sets redirect URI (https://connect.zepto.com/auth/callback), adds User.Read API permission, creates client secret. App is live in 2 hours.',tel:'జెప్టో "ZeptoConnect" అంతర్గత పోర్టల్ App Registrations లో నమోదు చేసి OAuth 2.0 కాన్ఫిగర్ చేయగా — ఉద్యోగులు @zepto.com ఖాతాతో లాగిన్ అవుతారు. కొత్త పాస్‌వర్డ్ అవసరం లేదు.',result:'Employee portal launched in 1 week. Zero new passwords. 100% SSO login rate.'}},
+  'roles-admins':{icon:'🛡️',title:'Roles & admins',tel:'పాత్రలు & నిర్వాహకులు',path:'Entra ID > Roles & admins',tag:'RBAC',
+    en:'Assign Azure AD built-in roles (Global Administrator, User Administrator, Security Reader, etc.) to users or groups. Follow the Principle of Least Privilege.',
+    te:'Azure AD అంతర్నిర్మిత పాత్రలు వినియోగదారులు లేదా గ్రూపులకు కేటాయించండి. తక్కువ అనుమతి సూత్రాన్ని అనుసరించండి.',
+    subs:[],
+    ex:{scenario:'<b>State Bank of India (SBI) – IT Admin Team Restructuring.</b> SBI has 3 IT admins: Priya manages users, Anand manages security, Suresh only resets passwords. All 3 had Global Admin — a major security risk.',use:'CISO restructures: Priya → User Administrator, Anand → Security Administrator, Suresh → Helpdesk Administrator. Global Admin moved to PIM-eligible only for 2 senior managers.',tel:'SBI లో అందరికీ Global Admin ఉంది — ప్రమాదం! ఇప్పుడు: Priya కి User Admin, Anand కి Security Admin, Suresh కి Helpdesk Admin. Global Admin PIM ద్వారా మాత్రమే సక్రియం చేయవచ్చు.',result:'ISO 27001 audit "excessive privileges" finding resolved. Zero operational impact.'}},
+  'delegated-admin':{icon:'🤝',title:'Delegated admin partners',tel:'అప్పగించిన నిర్వాహక భాగస్వాములు',path:'Entra ID > Delegated admin partners',tag:'Partners',
+    en:'Manage Microsoft partner organizations granted delegated administration rights to your tenant. Partners can administer your tenant on your behalf. Review and revoke relationships here.',
+    te:'మీ టెనెంట్‌కు నిర్వహణ హక్కులు మంజూరు చేయబడిన Microsoft భాగస్వామి సంస్థలను నిర్వహించండి.',
+    subs:[],
+    ex:{scenario:'<b>Pune Manufacturing Company (500 users) – IT outsourced to "CloudCare IT Solutions".</b> CloudCare manages M365 tenant — creates users, manages licenses, handles support. Contract ends in 3 months.',use:'CloudCare appears in Delegated Admin Partners with "Helpdesk" and "License Management" roles — NOT Global Admin. When contract ends, IT head clicks "Remove" → CloudCare loses all access instantly.',tel:'పూణే కంపెనీ IT "CloudCare IT Solutions" కి అప్పగించింది. Contract ముగించినప్పుడు "Remove" క్లిక్ చేయగా — CloudCare యొక్క అన్ని యాక్సెస్ వెంటనే రద్దు అవుతుంది.',result:'Partner access fully controlled and instantly revocable. GDPR compliance maintained.'}},
+  'domain-services':{icon:'🌐',title:'Domain services',tel:'డొమైన్ సేవలు',path:'Entra ID > Domain services',tag:'Infrastructure',
+    en:'Azure AD Domain Services provides managed domain services — domain join, group policy, LDAP, Kerberos/NTLM authentication — without deploying domain controllers. Useful for legacy app migration to the cloud.',
+    te:'Azure AD DS నిర్వహించబడిన డొమైన్ సేవలు అందిస్తుంది — డొమైన్ జాయిన్, group policy, LDAP, Kerberos/NTLM ప్రమాణీకరణ — డొమైన్ కంట్రోలర్‌లు లేకుండా.',
+    subs:[],
+    ex:{scenario:'<b>IRCTC – Migrating 15-year-old Payroll App to Azure.</b> The legacy .NET payroll app requires Windows Kerberos authentication. Moving to Azure VMs means they need an Active Directory domain, but setting up domain controllers is expensive.',use:'IRCTC enables Azure AD Domain Services. The managed domain provides Kerberos auth, LDAP, and Group Policy. The legacy payroll app works unchanged on Azure VMs — no code changes needed.',tel:'IRCTC యొక్క 15 ఏళ్ళ పాత పేరోల్ యాప్‌కు Windows Domain అవసరం. Azure AD Domain Services వల్ల — domain controllers ఏర్పాటు లేకుండా managed domain అందుబాటులో ఉంది.',result:'Legacy app migrated without code changes. Domain controller maintenance eliminated. ₹15L/year savings.'}},
+  'identity-secure-score':{icon:'📊',title:'Identity Secure Score',tel:'గుర్తింపు సురక్షిత స్కోర్',path:'Entra ID > Identity Secure Score',tag:'Security',
+    en:'A percentage-based score (0–100%) measuring how aligned your identity configuration is with Microsoft security best practices. Each recommendation shows potential score improvement and remediation guidance.',
+    te:'మీ గుర్తింపు కాన్ఫిగరేషన్ Microsoft భద్రత ఉత్తమ పద్ధతులతో ఎంత అనుగుణంగా ఉందో కొలిచే స్కోర్ (0–100%).',
+    subs:[],
+    ex:{scenario:'<b>Byju\'s – Security Audit Preparation for VC due-diligence, Bangalore.</b> Investors asked: "How mature is your identity security?" CISO needed a quantifiable answer fast.',use:'Identity Secure Score showed 52/100. Top 3 recommendations actioned: Enable MFA for admins (+12), Block legacy auth (+8), Enable SSPR (+5). Score jumped to 77/100 in 2 weeks.',tel:'Byju\'s Identity Secure Score 52/100 ఉంది. Top 3 సిఫారసులు అమలు చేసిన తర్వాత 2 వారాలలో స్కోర్ 77/100 కి పెరిగింది.',result:'Score 52→77 in 2 weeks. VC due-diligence passed. "Strong security posture" in investor report.'}},
+  'auth-methods':{icon:'🔐',title:'Authentication methods',tel:'ప్రమాణీకరణ పద్ధతులు',path:'Entra ID > Authentication methods',tag:'Security',
+    en:'Configure which authentication methods are available to users: Microsoft Authenticator app, SMS, voice call, FIDO2 security keys, Windows Hello for Business, Temporary Access Pass, and certificate-based auth.',
+    te:'వినియోగదారులకు అందుబాటులో ఉన్న ప్రమాణీకరణ పద్ధతులు కాన్ఫిగర్ చేయండి: Microsoft Authenticator యాప్, SMS, FIDO2 కీలు, Windows Hello.',
+    subs:[],
+    ex:{scenario:'<b>Axis Bank – RBI Mandated Strong MFA for 75,000 banking staff.</b> RBI circular required strong MFA. SMS OTP was not sufficient (SIM-swap vulnerable). FIDO2 needed for privileged admins.',use:'Axis configures Authentication Methods: Authenticator app (push + number matching) REQUIRED for all. SMS/voice DISABLED. FIDO2 hardware keys enabled for 200 privileged IT admins.',tel:'ఆక్సిస్ బ్యాంక్ 75,000 ఉద్యోగులకు Microsoft Authenticator తప్పనిసరి చేసింది. SMS OTP నిలిపివేయబడింది. 200 IT అడ్మిన్‌లకు FIDO2 hardware keys.',result:'RBI compliance achieved. MFA adoption 99.8% in 30 days. Phishing attacks blocked: 47 in Q1.'}},
+  'account-recovery':{icon:'🔄',title:'Account recovery (Preview)',tel:'ఖాతా పునరుద్ధరణ (ప్రివ్యూ)',path:'Entra ID > Account recovery (Preview)',tag:'Preview',
+    en:'Preview feature: configure automated account recovery workflows for locked accounts using alternative verification methods without IT helpdesk intervention.',
+    te:'ప్రివ్యూ ఫీచర్: IT helpdesk లేకుండా వినియోగదారులు స్వయంచాలకంగా లాక్ అయిన ఖాతాలు పునరుద్ధరించగలరు.',
+    subs:[],
+    ex:{scenario:'<b>Tech Mahindra – 300+ "account locked" helpdesk calls every month, Pune.</b> Especially on Monday mornings after weekend password expiry. Each call takes 8 minutes of IT time.',use:'Account Recovery configured: employees verify via phone + Authenticator, get unlocked without calling IT. The self-service flow guides them in 3 steps.',tel:'టెక్ మహీంద్రాలో నెలకు 300+ లాక్ కాల్‌లు వస్తాయి. Account Recovery తర్వాత — ఫోన్ + Authenticator ద్వారా స్వయంగా unlock చేసుకుంటారు.',result:'Helpdesk volume down 60%. Monday morning queues eliminated.'}},
+  'password-reset':{icon:'🔒',title:'Password reset',tel:'పాస్‌వర్డ్ రీసెట్',path:'Entra ID > Password reset',tag:'Self-Service',
+    en:'Configure Self-Service Password Reset (SSPR) so users reset their own passwords without IT help. Set authentication methods, configure writeback to on-premises AD, and view usage reports.',
+    te:'వినియోగదారులు IT సహాయం లేకుండా తమ పాస్‌వర్డ్‌లను రీసెట్ చేసుకోవడానికి SSPR కాన్ఫిగర్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>HCL Technologies – 2 Lakh employees, 5,000 password reset calls per month.</b> Each call costs ₹400. That\'s ₹20 Lakhs/month just for password resets.',use:'HCL enables SSPR with 2 required methods: Authenticator + mobile number. Employees visit aka.ms/sspr, verify, reset password in 90 seconds — even at 2 AM without calling anyone.',tel:'HCL కి నెలకు 5,000 పాస్‌వర్డ్ రీసెట్ కాల్‌లు వస్తాయి. SSPR ప్రారంభించిన తర్వాత — aka.ms/sspr లో Authenticator + ఫోన్ verify చేసి 90 సెకన్లలో రీసెట్ చేసుకుంటారు.',result:'Calls dropped 5,000→800/month. Savings: ₹16.8 Lakhs/month. ROI achieved in week 1.'}},
+  'custom-security-attrs':{icon:'🏷️',title:'Custom security attributes',tel:'అనుకూల భద్రత లక్షణాలు',path:'Entra ID > Custom security attributes',tag:'Attributes',
+    en:'Define custom business-specific attributes assigned to Azure AD objects (users, groups, apps). Use for ABAC (attribute-based access control) — classify users by clearance level, project, or role.',
+    te:'Azure AD వస్తువులకు కేటాయించగల అనుకూల వ్యాపార-నిర్దిష్ట లక్షణాలు నిర్వచించండి. ABAC విధానాలు నడపడానికి ఉపయోగిస్తారు.',
+    subs:[],
+    ex:{scenario:'<b>ISRO – Classified Project Access Control for Chandrayaan Mission.</b> 3 clearance levels: Public, Restricted, TopSecret. Only engineers with TopSecret clearance can access Chandrayaan mission files on SharePoint.',use:'ISRO creates Custom Attribute "ClearanceLevel" with values: Public, Restricted, TopSecret. Each engineer is tagged. Conditional Access filters ensure only TopSecret users reach classified SharePoint.',tel:'ISRO లో "ClearanceLevel" అనే Custom Attribute సృష్టించబడింది. Chandrayaan SharePoint కి — ClearanceLevel=TopSecret ఉన్న ఇంజనీర్లకు మాత్రమే యాక్సెస్.',result:'Zero unauthorized access to classified files. Audit trail maintained. Security model approved by CISO.'}},
+  'cert-authorities':{icon:'📜',title:'Certificate authorities',tel:'సర్టిఫికేట్ అధికారాలు',path:'Entra ID > Certificate authorities',tag:'PKI',
+    en:'Upload trusted root CA certificates to enable certificate-based authentication (CBA). Users authenticate using X.509 certificates on smart cards instead of passwords — phishing-resistant.',
+    te:'Certificate-based authentication ప్రారంభించడానికి root CA సర్టిఫికేట్‌లు అప్‌లోడ్ చేయండి. వినియోగదారులు smart card ద్వారా లాగిన్ అవుతారు.',
+    subs:[],
+    ex:{scenario:'<b>Ministry of Finance, Government of India – Phishing-Resistant Auth for IAS Officers.</b> Senior officers handle sensitive financial data. CERT-In requires passwordless, phishing-resistant authentication.',use:'Each officer gets a government-issued smart card with X.509 certificate. Ministry uploads their CA to Entra ID → Certificate Authorities. Officers insert card + PIN to log in — no password transmitted.',tel:'భారత ఆర్థిక మంత్రిత్వ శాఖ అధికారులు smart card + PIN తో లాగిన్ అవుతారు. పాస్‌వర్డ్ నెట్‌వర్క్‌లో ప్రవహించదు. Phishing అసాధ్యం.',result:'CERT-In compliance achieved. Phishing attacks → zero for CBA users. Adopted as model for other ministries.'}},
+  'external-identities':{icon:'🌍',title:'External Identities',tel:'బాహ్య గుర్తింపులు',path:'Entra ID > External Identities',tag:'B2B/B2C',
+    en:'Configure B2B Collaboration (invite external partners as guests using their own accounts) and B2C (customer-facing apps with social login via Google, Facebook, Apple).',
+    te:'B2B: బాహ్య భాగస్వాముల ను అతిథులుగా ఆహ్వానించండి. B2C: సోషల్ లాగిన్‌తో కస్టమర్-ఫేసింగ్ యాప్‌లు నిర్మించండి.',
+    subs:[],
+    ex:{scenario:'<b>Tata Motors + Jaguar Land Rover (JLR) Joint Venture Project.</b> 150 JLR engineers (UK, @jlr.com accounts) need access to Tata Motors Teams channels and SharePoint. Creating new Tata accounts for all of them is impractical.',use:'Tata Motors IT invites 150 JLR engineers via B2B. JLR engineers sign in with their own @jlr.com Microsoft credentials — no new passwords. Tata controls exact Teams channels and SharePoint folders they can access.',tel:'టాటా మోటర్స్ B2B Collaboration వల్ల JLR ఇంజనీర్లు వారి @jlr.com ఖాతాతో Tata Teams లో అతిథిగా చేరతారు. కొత్త పాస్‌వర్డ్ అవసరం లేదు.',result:'Cross-company collaboration live in 1 day. Full access control by Tata IT. No extra license cost.'}},
+  'cross-tenant-sync':{icon:'🔃',title:'Cross-tenant synchronization',tel:'క్రాస్-టెనెంట్ సమకాలీకరణ',path:'Entra ID > Cross-tenant synchronization',tag:'Multi-Tenant',
+    en:'Automatically synchronize users across multiple Azure AD tenants within the same organization. Users from Tenant A appear in Tenant B\'s directory for seamless collaboration.',
+    te:'ఒకే సంస్థలోని అనేక Azure AD టెనెంట్‌లలో వినియోగదారులను స్వయంచాలకంగా సమకాలీకరించండి.',
+    subs:[],
+    ex:{scenario:'<b>Mahindra Group – 25+ subsidiaries each with their own Azure AD tenant.</b> A Tech Mahindra engineer needs to collaborate with Mahindra Finance. IT had to manually create guest accounts every time — 50+ requests per week.',use:'Cross-tenant sync configured between all Mahindra tenants. Tech Mahindra engineers appear as internal members (not guests) in Mahindra Finance — show in Teams search, can be @mentioned in emails.',tel:'మహీంద్రా గ్రూప్ 25+ సంస్థలలో Cross-tenant sync వల్ల Tech Mahindra ఇంజనీర్లు Mahindra Finance tenant లో స్వయంచాలకంగా కనిపిస్తారు.',result:'Zero manual guest invitations. Seamless collaboration across 25 subsidiaries.'}},
+  'entra-connect':{icon:'🔗',title:'Entra Connect',tel:'ఎంట్రా కనెక్ట్',path:'Entra ID > Entra Connect',tag:'Hybrid',
+    en:'Microsoft Entra Connect synchronizes on-premises Active Directory identities to Azure AD. Enables hybrid identity — users have the same credentials on-prem and in the cloud.',
+    te:'Entra Connect on-premises Active Directory గుర్తింపులను Azure AD కి సమకాలీకరిస్తుంది. హైబ్రిడ్ గుర్తింపు ప్రారంభిస్తుంది.',
+    subs:[],
+    ex:{scenario:'<b>Coal India Limited – Transitioning 80,000 employees to Microsoft 365.</b> CIL has on-prem Windows Server AD for 20 years. Employees must keep existing Windows credentials — cannot force new accounts.',use:'CIL installs Entra Connect. It syncs 80,000 users from on-prem AD to Entra ID every 30 minutes. Employees use their existing coal-india.nic.in password for both Windows AND M365, Teams, SharePoint.',tel:'Coal India 80,000 ఉద్యోగులు Entra Connect తర్వాత — అదే Windows పాస్‌వర్డ్‌తో M365, Teams, SharePoint లాగిన్ అవుతారు.',result:'80,000 users migrated. Zero password changes. Cloud adopted in 3 months. Zero user disruption.'}},
+  'domain-names':{icon:'🏷️',title:'Domain names',tel:'డొమైన్ పేర్లు',path:'Entra ID > Domain names',tag:'Configuration',
+    en:'Add and verify custom domain names for your Azure AD tenant. After DNS TXT verification, users sign in with yourname@yourcompany.com instead of @yourcompany.onmicrosoft.com.',
+    te:'అనుకూల డొమైన్ పేర్లు జోడించండి. DNS ధృవీకరణ తర్వాత yourname@yourcompany.com తో సైన్ ఇన్ చేయవచ్చు.',
+    subs:[],
+    ex:{scenario:'<b>Ola Electric – Setting up Microsoft 365 for new startup, Bangalore.</b> All user accounts were @olaelectric.onmicrosoft.com — unprofessional, confusing for vendors and customers.',use:'IT adds "olaelectric.com" in Domain Names. Microsoft provides a DNS TXT record to add in Cloudflare. After verification, all accounts renamed to @olaelectric.com.',tel:'Ola Electric Domain Names లో olaelectric.com జోడించి DNS TXT verify చేసిన తర్వాత — అన్ని 2,000 ఖాతాలు @olaelectric.com గా మారాయి.',result:'Professional emails for all 2,000 employees. Brand consistency. Better email delivery.'}},
+  'custom-branding':{icon:'🎨',title:'Custom branding',tel:'అనుకూల బ్రాండింగ్',path:'Entra ID > Custom branding',tag:'UX',
+    en:'Customize the Microsoft sign-in page with your company\'s logo, background image, and color theme. Employees recognize the authentic page, protecting against phishing.',
+    te:'Microsoft సైన్-ఇన్ పేజీని కంపెనీ లోగో, నేపథ్య చిత్రం మరియు రంగు థీమ్‌తో అనుకూలీకరించండి.',
+    subs:[],
+    ex:{scenario:'<b>Zomato – Employee phishing attack, Gurugram.</b> Employees receiving phishing emails with fake Microsoft login pages. The real login page was generic — employees could not tell real from fake.',use:'Zomato adds custom branding: Zomato logo, red background with delivery partner imagery, message: "Official Zomato Sign-in – If you didn\'t request this, call IT immediately." Employees now recognize the authentic page.',tel:'జొమాటో Custom Branding తర్వాత — అసలు login పేజీలో Zomato లోగో, ఎర్ర నేపథ్యం, "Official Zomato Sign-in" సందేశం. నకిలీ పేజీ వెంటనే గుర్తుపట్టవచ్చు.',result:'Phishing success rate near zero. Incident count fell 80%.'}},
+  mobility:{icon:'📱',title:'Mobility (MDM & MAM)',tel:'మొబిలిటీ (MDM & MAM)',path:'Entra ID > Mobility',tag:'Device',
+    en:'Configure Mobile Device Management (MDM — manages entire devices) and Mobile Application Management (MAM — manages only apps/data on personal BYOD devices). Integrates with Microsoft Intune.',
+    te:'MDM మొత్తం పరికరాలను నిర్వహిస్తుంది. MAM వ్యక్తిగత (BYOD) పరికరాలలో కేవలం యాప్‌లు మరియు వాటి డేటాను నిర్వహిస్తుంది.',
+    subs:[],
+    ex:{scenario:'<b>Flipkart – 10,000 warehouse staff using personal Android phones.</b> Flipkart wants staff using Outlook and Teams on personal phones — but legally cannot wipe personal devices.',use:'Flipkart uses MAM (not MDM): Outlook/Teams on personal phones have copy-paste disabled between work/personal apps, screen capture blocked. When staff leave, only work app data is wiped — personal photos, WhatsApp untouched.',tel:'ఫ్లిప్‌కార్ట్ MAM వల్ల — ఉద్యోగి వదిలిపోతే వ్యక్తిగత ఫోటోలు, WhatsApp అలాగే ఉంటాయి. కేవలం Outlook, Teams పని డేటా మాత్రమే తొలగించబడుతుంది.',result:'BYOD program launched. Zero legal issues. 98% enrolled in MAM in 2 weeks.'}},
+  'monitoring-health':{icon:'❤️',title:'Monitoring & health',tel:'పర్యవేక్షణ & ఆరోగ్యం',path:'Entra ID > Monitoring & health',tag:'Monitoring',
+    en:'Access sign-in logs, audit logs, provisioning logs, and usage & insights reports. Monitor service health, view risky sign-ins, and stream logs to Azure Monitor or Log Analytics.',
+    te:'సైన్-ఇన్ లాగ్‌లు, ఆడిట్ లాగ్‌లు, provisioning లాగ్‌లు యాక్సెస్ చేయండి. ప్రమాదకర సైన్-ఇన్‌లను పర్యవేక్షించండి.',
+    subs:[],
+    ex:{scenario:'<b>ICICI Bank SOC – Detecting account compromise at 3 AM, Mumbai.</b> SOC analyst sees: "priya.sharma@icicibank.com signed in from Chennai 11 PM, then Moscow 11:05 PM." — physically impossible!',use:'SOC opens Monitoring → Sign-in logs, confirms: unknown Russian IP, unknown device, no MFA. They disable Priya\'s account, force password reset, call Priya — who confirms she never signed in from Russia.',tel:'ICICI SOC Monitoring → Sign-in logs లో impossible travel detect చేసి — ఖాతా 8 నిమిషాలలో నిలిపివేసింది. Priya ని కాల్ చేసి confirm చేసుకున్నారు.',result:'Account compromise stopped in 8 minutes. No data exfiltrated. SOC team commended by CISO.'}},
+  'idgov-dashboard':{icon:'📊',title:'ID Governance Dashboard',tel:'ID పాలన డ్యాష్‌బోర్డ్',path:'ID Governance > Dashboard',tag:'Governance',
+    en:'The Identity Governance Dashboard shows pending access reviews, entitlement requests, PIM activations, and lifecycle workflow executions. Use it to monitor compliance posture.',
+    te:'Identity Governance Dashboard పెండింగ్ యాక్సెస్ సమీక్షలు, అర్హత అభ్యర్థనలు, PIM సక్రియకరణలు, వర్క్‌ఫ్లో అమలులు చూపిస్తుంది.',
+    subs:[],
+    ex:{scenario:'<b>KPMG India – Quarterly Compliance Review before external ISO 27001 audit.</b> Compliance manager needs to show auditors: are access reviews happening? Are PIM activations justified? Are offboarding workflows running?',use:'She opens ID Governance Dashboard: 3 pending access reviews (sends reminders), 12 PIM activations this month (all with justifications), 8 Leaver workflows executed (all accounts disabled on time). Dashboard becomes audit evidence.',tel:'KPMG India ISO 27001 audit కోసం ID Governance Dashboard తెరిచి — 3 pending reviews, 12 PIM activations, 8 Leaver workflows అన్నీ documentation గా auditors కి చూపించింది.',result:'ISO 27001 identity governance section: zero findings. Audit completed in 1 day.'}},
+  'entitlement-mgmt':{icon:'🎫',title:'Entitlement management',tel:'అర్హత నిర్వహణ',path:'ID Governance > Entitlement management',tag:'Access',
+    en:'Create Access Packages — bundles of resources (group memberships, app access, SharePoint sites) users can self-request. Define approval workflows and auto-expiration policies.',
+    te:'యాక్సెస్ ప్యాకేజీలు సృష్టించండి — వినియోగదారులు అభ్యర్థించగల వనరుల సమూహాలు. అనుమోదన వర్క్‌ఫ్లోలు మరియు స్వయంచాలక గడువు నిర్వచించండి.',
+    subs:[],
+    ex:{scenario:'<b>Infosys – 500 new project joiners needing SAP + SharePoint + Teams access every sprint.</b> Each request required 3 separate IT tickets and 2–3 days of approval back-and-forth.',use:'Infosys creates an Access Package "SAP-Project-Bundle" containing: SAP Project group + ProjectX SharePoint site + Teams channel. New project members request it from MyAccess portal → their manager approves → all 3 accesses granted in 10 minutes. Auto-expires after project end date.',tel:'ఇన్ఫోసిస్ "SAP-Project-Bundle" Access Package సృష్టించింది — SAP Group + SharePoint + Teams కలిసి ఉన్నాయి. కొత్త మెంబర్ MyAccess portal లో request చేయగా manager approve చేస్తే 10 నిమిషాలలో 3 యాక్సెస్‌లు లభిస్తాయి.',result:'3 IT tickets → 1 self-service request. 2 days → 10 minutes. 100% approved requests tracked.'}},
+  'access-reviews':{icon:'🔍',title:'Access reviews',tel:'యాక్సెస్ సమీక్షలు',path:'ID Governance > Access reviews',tag:'Compliance',
+    en:'Schedule periodic reviews of user access to groups, apps, and Azure AD roles. Reviewers confirm or revoke. Auto-apply decisions remove unconfirmed access. Critical for SOX, ISO 27001 compliance.',
+    te:'వినియోగదారు యాక్సెస్ యొక్క నిరంతర సమీక్షలు షెడ్యూల్ చేయండి. SOX, ISO 27001 సమ్మతికి క్లిష్టమైనది.',
+    subs:[],
+    ex:{scenario:'<b>HDFC Securities – SEBI Requires Quarterly Access Reviews for Trading Systems.</b> SEBI regulations require that access to trading systems be formally reviewed every quarter — who still needs it, who shouldn\'t have it anymore.',use:'IT schedules quarterly Access Reviews for the "Trading-Platform" group. Managers of each member receive an email: "Does [employee] still need trading access?" Managers confirm or deny. Employees not reconfirmed lose access automatically after 7 days.',tel:'HDFC Securities SEBI నిబంధనల కోసం Trading Platform యాక్సెస్ quarterly review సెటప్ చేసింది. Managers ప్రతి 3 నెలలకు confirm చేయాలి — confirm చేయకపోతే యాక్సెస్ స్వయంచాలకంగా తొలగిపోతుంది.',result:'SEBI audit passed. 47 stale access entries found and removed. Zero manual spreadsheet tracking.'}},
+  pim:{icon:'👑',title:'Privileged Identity Management',tel:'అధికార గుర్తింపు నిర్వహణ',path:'ID Governance > Privileged Identity Management',tag:'Security',
+    en:'PIM provides just-in-time privileged access to Azure AD roles. Admins are "eligible" but must activate roles with justification and time limit rather than having permanent access. Requires MFA and approval workflows.',
+    te:'PIM Azure AD పాత్రలకు just-in-time అధికార యాక్సెస్ అందిస్తుంది. నిర్వాహకులు అవసరమైనప్పుడు సమర్థనతో పాత్ర సక్రియం చేయాలి.',
+    subs:[],
+    ex:{scenario:'<b>Bajaj Finance – Preventing insider threat using PIM, Pune.</b> Global Admin was a permanent role for 5 IT admins. If any admin account was compromised, attackers would have permanent Global Admin — catastrophic. RBI audit flagged this.',use:'Bajaj implements PIM: all 5 admins become "eligible" for Global Admin (not permanent). When admin Suresh needs to make a tenant change, he requests Global Admin activation → justifies in writing → his manager approves → PIM grants access for 4 hours → auto-revokes.',tel:'Bajaj Finance లో 5 Global Admins కి permanent access తొలగించి PIM eligible చేయబడింది. అవసరమైనప్పుడు Suresh request చేసి → manager approve చేసి → 4 గంటల access పొందుతాడు → auto revoke.',steps:['Go to PIM → Azure AD roles → Global Administrator','Click Assignments → Remove all permanent assignments','Add 5 admins as "Eligible" (not Active)','Configure: Require MFA + Justification + Manager approval','Set maximum activation duration: 4 hours'],result:'RBI audit finding resolved. Zero permanent Global Admins. PIM activation log becomes full audit trail.'}},
+  'lifecycle-workflows':{icon:'🔄',title:'Lifecycle workflows',tel:'జీవితకాల వర్క్‌ఫ్లోలు',path:'ID Governance > Lifecycle workflows',tag:'Automation',
+    en:'Automate Joiner (onboarding), Mover (transfer), and Leaver (offboarding) identity processes. Trigger based on HR attributes like hire date, transfer date, or termination date.',
+    te:'Joiner (onboarding), Mover (బదిలీ), Leaver (offboarding) గుర్తింపు ప్రక్రియలు స్వయంచాలకం చేయండి. HR లక్షణాల ఆధారంగా వర్క్‌ఫ్లోలు ట్రిగ్గర్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>Amazon India – High employee churn, daily joiners and leavers across 20 fulfillment centers.</b> On average, 150 employees join and 80 leave daily. Manual onboarding/offboarding creates security gaps — ex-employee accounts sometimes active for weeks after leaving.',use:'Lifecycle Workflows configured: <b>Joiner</b> — when HireDate arrives, auto-create account, assign license, add to warehouse group, send welcome email. <b>Leaver</b> — when TerminationDate arrives, auto-disable account, remove group memberships, notify IT, revoke all tokens.',tel:'Amazon India లో రోజూ 150 చేరతారు, 80 వెళ్ళిపోతారు. Lifecycle Workflows వల్ల: HireDate రాగానే Joiner workflow → account + license + groups స్వయంచాలకంగా. TerminationDate రాగానే Leaver workflow → account disable + access remove + IT notify.',steps:['ID Governance → Lifecycle Workflows → Create → Joiner type','Set trigger: Employee HireDate attribute from HR system','Add tasks: Create account, Assign license, Add to group, Send welcome email','Create Leaver workflow: trigger on TerminationDate','Tasks: Disable account, Remove groups, Revoke refresh tokens, Email manager'],result:'Zero day-1 access failures. Zero ex-employee active accounts. 100% audit trail. IT onboarding team headcount reduced by 3.'}},
+  'verid-overview':{icon:'ℹ️',title:'Verified ID Overview',tel:'ధృవీకృత ID అవలోకనం',path:'Verified ID > Overview',tag:'Decentralized ID',
+    en:'Microsoft Entra Verified ID is a decentralized identity service based on W3C open standards (DIDs & Verifiable Credentials). Users hold credentials in the Microsoft Authenticator wallet. No central database — issuers create credentials; verifiers check them without contacting the issuer.',
+    te:'Verified ID W3C ప్రమాణాలు ఆధారంగా వికేంద్రీకృత గుర్తింపు సేవ. వినియోగదారులు Microsoft Authenticator వ్యాలెట్‌లో credentials ఉంచుతారు.',
+    subs:[],
+    ex:{scenario:'<b>IIT Bombay – Verifying Alumni Credentials for Job Applications.</b> A company recruiting from IIT wants to verify a candidate\'s degree instantly. Currently, HR emails IIT, waits 5–10 days for a letter, risks receiving forged documents.',use:'IIT Bombay issues "Verified Degree Credentials" using Entra Verified ID. The graduate holds their digital degree in Microsoft Authenticator. When applying for a job, they tap Share in Authenticator — the employer verifies instantly with a cryptographic check. No phone call or email to IIT needed.',tel:'IIT Bombay Entra Verified ID వాడి digital degree credential జారీ చేస్తుంది. Graduate Microsoft Authenticator లో credential ఉంచుతారు. Job application సమయంలో — employer 3 సెకన్లలో cryptographically verify చేస్తారు. నకిలీ అసాధ్యం.',result:'Verification time: 10 days → 3 seconds. Fraud risk: eliminated. IIT HR team freed from 200+ monthly verification requests.'}},
+  credentials:{icon:'🎫',title:'Credentials',tel:'ప్రమాణపత్రాలు',path:'Verified ID > Credentials',tag:'Decentralized ID',
+    en:'Design and configure verifiable credential types — define the claims included (name, role, certification, employment status) and how they are sourced from ID tokens, access tokens, or self-attested input.',
+    te:'ధృవీకరించదగిన credential రకాలు రూపొందించండి. చేర్చిన claims నిర్వచించండి (పేరు, పాత్ర, సర్టిఫికేషన్, ఉద్యోగ స్థితి).',
+    subs:[],
+    ex:{scenario:'<b>NASSCOM – Digital Employee Verification for IT Industry, India.</b> NASSCOM wants to issue a "Verified IT Professional" credential to members who have passed their skill assessments — so companies can hire without lengthy background checks.',use:'NASSCOM configures a credential in Verified ID with claims: FullName, SkillLevel (Associate/Senior/Expert), CertificationDate, MemberID. Professionals who pass the assessment receive the credential in Authenticator and share it with any employer instantly.',tel:'NASSCOM "Verified IT Professional" credential configure చేసింది — FullName, SkillLevel, CertificationDate claims తో. Assessment pass చేసిన professionals తమ credential Authenticator లో ఉంచి employers కి instantly share చేస్తారు.',result:'Hiring verification time: 2 weeks → same day. Forgery risk eliminated. 10,000+ credentials issued in year 1.'}},
+  'org-settings':{icon:'⚙️',title:'Organization settings',tel:'సంస్థ సెట్టింగులు',path:'Verified ID > Organization settings',tag:'Configuration',
+    en:'Configure your organization\'s Verified ID tenant: set up the DID (Decentralized Identifier), register signing keys, configure Azure Key Vault for key storage, and link your domain to the DID document.',
+    te:'మీ సంస్థ Verified ID కాన్ఫిగర్ చేయండి: DID సెటప్, signing keys నమోదు, Azure Key Vault కాన్ఫిగర్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>NPCI (National Payments Corporation of India) – Setting up as a Verified ID Issuer.</b> NPCI wants to issue "RuPay Merchant Verified" credentials to certified merchants so banks and payment gateways can verify them instantly without contacting NPCI.',use:'NPCI IT team sets up Organization Settings: creates DID (did:web:npci.org.in), uploads signing certificate to Azure Key Vault, links the DID to npci.org.in domain. NPCI is now a trusted issuer — any verifier worldwide can cryptographically confirm credentials were issued by the real NPCI.',tel:'NPCI Organization Settings లో DID (did:web:npci.org.in) సృష్టించి, Azure Key Vault లో signing certificate అప్‌లోడ్ చేసి, domain తో link చేసింది. ఇప్పుడు NPCI trusted issuer — ప్రపంచంలో ఎక్కడైనా verify చేయవచ్చు.',result:'NPCI becomes a trusted global credential issuer. Merchant verification: instant. Credential forgery: cryptographically impossible.'}},
+  'gsa-dashboard':{icon:'📊',title:'Global Secure Access Dashboard',tel:'గ్లోబల్ సెక్యూర్ యాక్సెస్ డ్యాష్‌బోర్డ్',path:'Global Secure Access > Dashboard',tag:'Zero Trust',
+    en:'Global Secure Access (GSA) is Microsoft\'s Security Service Edge (SSE) — a cloud-based network security perimeter. Dashboard shows traffic summaries, active users, top apps, alerts, and cross-tenant access activity.',
+    te:'GSA Microsoft యొక్క Security Service Edge — క్లౌడ్-ఆధారిత నెట్‌వర్క్ భద్రత. Dashboard ట్రాఫిక్ సారాంశాలు, క్రియాశీల వినియోగదారులు, హెచ్చరికలు చూపిస్తుంది.',
+    subs:[],
+    ex:{scenario:'<b>Accenture India – 3 Lakh remote employees post-pandemic, no corporate VPN capacity.</b> During COVID, 3 lakh employees went remote overnight. The on-prem VPN concentrators couldn\'t handle the load — employees had slow, unreliable access to internal apps.',use:'Accenture deployed GSA. The GSA Dashboard shows the CISO: 2.8 lakh active users connected, top 10 internal apps accessed, 3 blocked threat attempts, average latency 18ms. No more VPN bottlenecks — traffic routes optimally through Microsoft\'s global network.',tel:'Accenture India 3 లక్షల remote employees కి GSA deploy చేసింది. Dashboard లో CISO చూస్తారు: 2.8 లక్షల active connections, top apps, blocked threats, 18ms average latency — VPN bottleneck లేదు.',result:'VPN infrastructure costs eliminated. Employee connectivity satisfaction: 92%. Security posture improved with Zero Trust.'}},
+  'quick-access':{icon:'⚡',title:'Quick Access',tel:'శీఘ్ర యాక్సెస్',path:'GSA > Applications > Quick Access',tag:'Network',
+    en:'Configure Quick Access to allow GSA clients to reach specific on-premises apps or private network resources without a full VPN. Define FQDNs or IP ranges tunneled through GSA.',
+    te:'నిర్దిష్ట on-premises వనరులను పూర్తి VPN లేకుండా చేరుకోవడానికి Quick Access కాన్ఫిగర్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>L&T (Larsen & Toubro) – Engineers accessing internal CAD servers from home, Mumbai.</b> Design engineers working from home need access to only the CAD design server (192.168.10.50) and project tracker (projects.lt-internal.com) — not the entire corporate network.',use:'L&T configures Quick Access with just these 2 resources: IP 192.168.10.50 and FQDN projects.lt-internal.com. GSA client on engineer\'s laptop tunnels only these specific connections — no full VPN exposing the entire network.',tel:'L&T Quick Access లో CAD server IP మరియు project tracker FQDN మాత్రమే జోడించింది. Engineers లాప్‌టాప్‌లో GSA client ఆ 2 connections మాత్రమే tunnel చేస్తుంది — మొత్తం నెట్‌వర్క్ expose అవదు.',result:'Zero Trust access achieved. Attack surface reduced 95%. Engineers access CAD tools from home with same performance as office.'}},
+  'app-discovery':{icon:'🔭',title:'Application discovery',tel:'అప్లికేషన్ ఆవిష్కరణ',path:'GSA > Applications > Application discovery',tag:'Visibility',
+    en:'Automatically discover cloud apps accessed by users using traffic log analysis. Identify shadow IT (unapproved apps), assess risk scores, and allow/block/sanction them.',
+    te:'ట్రాఫిక్ లాగ్ విశ్లేషణ ఉపయోగించి cloud యాప్‌లు స్వయంచాలకంగా కనుగొనండి. Shadow IT గుర్తించండి.',
+    subs:[],
+    ex:{scenario:'<b>Reliance Jio – Security team suspects data leakage via unauthorized cloud apps, Mumbai.</b> CISO asks: "Are employees uploading sensitive files to personal Google Drive, WeTransfer, or unapproved tools?"',use:'Application Discovery shows 847 distinct cloud apps being used — IT only approved 120. Discovery highlights: 23 file-sharing apps (WeTransfer, Mega, MediaFire), risk score 8–9/10. CISO blocks all high-risk file-sharing apps via policy. 450 employees were using them without IT knowledge.',tel:'Reliance Jio Application Discovery లో 847 cloud apps కనుగొనబడ్డాయి — IT 120 మాత్రమే approve చేసింది. 23 unauthorized file-sharing apps (risk 8-9/10) block చేయబడ్డాయి. 450 employees IT అనుమతి లేకుండా వాడుతున్నారు.',result:'Shadow IT reduced from 727 to 58 apps. Data leakage policy enforced. Security audit passed with no cloud data exposure findings.'}},
+  'gsa-enterprise-apps':{icon:'🏢',title:'Enterprise applications (GSA)',tel:'ఎంటర్‌ప్రైజ్ అప్లికేషన్‌లు (GSA)',path:'GSA > Applications > Enterprise applications',tag:'Network',
+    en:'View enterprise applications through the GSA lens — which apps are accessed through GSA tunnels, traffic volumes, and associated security policies.',
+    te:'GSA దృక్కోణం నుండి enterprise apps చూడండి — ఏ యాప్‌లు GSA టన్నెల్‌ల ద్వారా యాక్సెస్ చేయబడుతున్నాయి.',
+    subs:[],
+    ex:{scenario:'<b>Cognizant India – Monitoring which internal apps are most used via GSA, Pune.</b> IT needs to plan capacity for next year: which internal apps have the highest GSA traffic? Which are underused and can be decommissioned?',use:'GSA Enterprise Applications view shows: SAP ERP (top — 12GB/day), JIRA (second — 4GB/day), LegacyHR (last — 200MB/week). IT decides to migrate SAP to a public endpoint for better performance and decommission LegacyHR since usage is near zero.',tel:'Cognizant IT GSA Enterprise Apps view లో capacity planning చేస్తుంది: SAP 12GB/day (అత్యధికం), JIRA 4GB/day, LegacyHR 200MB/week (అతి తక్కువ). LegacyHR decommission నిర్ణయం తీసుకున్నారు.',result:'Infrastructure costs reduced ₹8L/year by decommissioning unused apps. SAP performance improved with optimized routing.'}},
+  'insights-analytics':{icon:'📈',title:'Insights & Analytics',tel:'అంతర్దృష్టులు & విశ్లేషణలు',path:'GSA > Applications > Insights & Analytics',tag:'Analytics',
+    en:'Deep analytics on traffic through GSA — user activity, app usage patterns, bandwidth consumption, anomalous access, and threat signals.',
+    te:'GSA ద్వారా ప్రవహించే ట్రాఫిక్‌పై లోతైన విశ్లేషణలు — వినియోగదారు కార్యాచరణ, బ్యాండ్‌విడ్త్ వినియోగం.',
+    subs:[],
+    ex:{scenario:'<b>Wipro SOC – Detecting unusual data transfer by an employee before resignation, Bangalore.</b> An employee submitted their notice 2 weeks ago. SOC wants to monitor unusual data access patterns during notice period.',use:'GSA Insights & Analytics shows the employee\'s bandwidth spiked to 4.2GB in one session (normally 200MB/day) — all to personal Dropbox. SOC flags the account, legal is notified, DLP policy blocks the upload mid-transfer.',tel:'Wipro SOC GSA Analytics లో notice period ఉద్యోగి bandwidth spike చూసింది: 4.2GB to personal Dropbox (normal: 200MB/day). DLP policy upload ని block చేసింది. Legal team notify చేయబడింది.',result:'Potential IP theft blocked in real time. Legal department informed. Dropbox upload stopped at 1.1GB.'}},
+  'traffic-forwarding':{icon:'↪️',title:'Traffic forwarding',tel:'ట్రాఫిక్ ఫార్వార్డింగ్',path:'GSA > Connect > Traffic forwarding',tag:'Network',
+    en:'Define which network traffic is routed through GSA. Three profiles: Microsoft 365 (optimize M365 traffic), Private Access (on-prem apps), and Internet Access (web filtering for all internet traffic).',
+    te:'ఏ నెట్‌వర్క్ ట్రాఫిక్‌ను GSA ద్వారా route చేయాలో నిర్వచించండి. మూడు ప్రొఫైల్‌లు: Microsoft 365, Private Access, Internet Access.',
+    subs:[],
+    ex:{scenario:'<b>Tata Steel – Optimizing Microsoft 365 performance for 70,000 employees across India.</b> Employees in Jamshedpur and Odisha plants experience slow Teams calls and laggy SharePoint — all M365 traffic was routed through central Mumbai IT hub first, then to Microsoft.',use:'IT enables the Microsoft 365 Traffic Forwarding profile in GSA. Now M365 traffic from each location goes directly to the nearest Microsoft PoP (Point of Presence) — no Mumbai detour. Teams call quality improved dramatically.',tel:'Tata Steel GSA Microsoft 365 Traffic Forwarding profile enable చేసింది. ఇప్పుడు Jamshedpur నుండి Teams traffic నేరుగా nearest Microsoft PoP కి వెళ్ళుతుంది — Mumbai detour తొలగించబడింది.',result:'Teams call quality score: 3.2/5 → 4.7/5. SharePoint load time: 8s → 1.2s. Employee productivity complaints down 90%.'}},
+  'client-download':{icon:'⬇️',title:'Client download',tel:'క్లయింట్ డౌన్‌లోడ్',path:'GSA > Connect > Client download',tag:'Deployment',
+    en:'Download the GSA client agent for Windows, macOS, iOS, and Android. The client routes device traffic through GSA, enforcing security policies regardless of network location.',
+    te:'Windows, macOS, iOS, Android కోసం GSA client agent డౌన్‌లోడ్ చేయండి. Client ట్రాఫిక్‌ను GSA ద్వారా route చేస్తుంది.',
+    subs:[],
+    ex:{scenario:'<b>Infosys BPO – 12,000 work-from-home agents across Tier-2 Indian cities.</b> BPO agents work from home in Vijayawada, Coimbatore, Indore. IT needs to enforce the same security policies as in the office — web filtering, DLP, access control — on personal internet connections.',use:'IT deploys GSA client via Intune to all 12,000 agents\' laptops. The client auto-installs and connects silently. Regardless of whether the agent is on Airtel, Jio, or BSNL broadband — the same office security policies apply instantly.',tel:'Infosys BPO IT team Intune ద్వారా 12,000 WFH agent laptops కి GSA client deploy చేసింది. Agent ఏ ISP వాడినా — office లో వలే same security policies apply అవుతాయి.',result:'WFH security parity with office: 100%. Data leakage incidents: zero. BPO client security SLA: met.'}},
+  'remote-networks':{icon:'🌐',title:'Remote networks',tel:'రిమోట్ నెట్‌వర్క్‌లు',path:'GSA > Connect > Remote networks',tag:'Network',
+    en:'Connect entire branch offices to GSA using IPsec/IKEv2 tunnels from the site\'s router — no individual client agents needed at remote locations.',
+    te:'branch offices ని IPsec/IKEv2 టన్నెల్‌లు ఉపయోగించి GSA కి అనుసంధానించండి — రిమోట్ లొకేషన్‌లలో individual client agents అవసరం లేదు.',
+    subs:[],
+    ex:{scenario:'<b>HDFC Bank – 500 branch offices across India need secure internet access.</b> Each branch has 5–20 employees sharing a local internet connection. IT cannot deploy software agents on 5,000+ shared PCs. They need security at the network level.',use:'IT configures Remote Networks in GSA for each branch\'s Cisco router using IPsec. The branch router creates a tunnel to GSA. All branch internet traffic (not just specific devices) flows through GSA — web filtering, threat protection, and DLP enforced for the entire branch automatically.',tel:'HDFC Bank 500 branches లోని Cisco routers లో IPsec tunnel GSA కి కాన్ఫిగర్ చేసింది. Branch internet traffic అంతా GSA ద్వారా వెళ్ళుతుంది — individual devices పై software install అవసరం లేదు.',result:'500 branches secured without touching any endpoint device. Uniform security policy across all branches. IT overhead reduced 70%.'}},
+  'private-networks':{icon:'🔒',title:'Private networks',tel:'ప్రైవేట్ నెట్‌వర్క్‌లు',path:'GSA > Connect > Private networks',tag:'Zero Trust',
+    en:'Configure private network access for users to reach internal resources (web apps, SSH, databases) through GSA without traditional VPN — Microsoft\'s ZTNA (Zero Trust Network Access) solution.',
+    te:'వినియోగదారులు సాంప్రదాయ VPN లేకుండా GSA ద్వారా అంతర్గత వనరులు చేరుకోవడానికి కాన్ఫిగర్ చేయండి — Microsoft ZTNA పరిష్కారం.',
+    subs:[],
+    ex:{scenario:'<b>Tech Mahindra – Replacing legacy VPN for 80,000 developers, Hyderabad.</b> The Cisco AnyConnect VPN gave all 80,000 devs access to the entire 10.x.x.x network once connected. A compromised laptop = entire datacenter exposed. CTO called this "a breach waiting to happen."',use:'Tech Mahindra migrates to GSA Private Networks. Each developer gets access only to their specific project\'s servers (e.g., dev-server-projectA.tm.internal) — not the entire network. If a laptop is compromised, only one project server is reachable, not the whole datacenter.',tel:'Tech Mahindra VPN replace చేసి GSA Private Networks వాడింది. ప్రతి developer తన project servers మాత్రమే చేరుకోగలరు. Compromised laptop వల్ల only 1 server exposure — entire datacenter కాదు.',result:'Attack blast radius reduced 99%. VPN hardware costs eliminated ($400K/year). Zero Trust network architecture certified.'}},
+  'connectors-sensors':{icon:'🔌',title:'Connectors and sensors',tel:'కనెక్టర్లు మరియు సెన్సర్లు',path:'GSA > Connect > Connectors and sensors',tag:'Infrastructure',
+    en:'Manage Private Network Connectors — lightweight agents on on-premises servers that relay traffic between GSA and private resources. Group connectors for high-availability.',
+    te:'Private Network Connectors నిర్వహించండి — GSA మరియు on-premises వనరుల మధ్య ట్రాఫిక్ relay చేసే agents.',
+    subs:[],
+    ex:{scenario:'<b>Mahindra Finance – High availability for 3,000 remote loan officers accessing internal LOS (Loan Origination System).</b> If the connector server goes down, loan officers cannot access the system — costing ₹50L/hour in lost business.',use:'IT installs 3 GSA connectors across 2 datacenters. They are grouped in a "LOS-Connector-Group" for automatic failover. If Connector-1 fails, GSA automatically routes through Connector-2 or Connector-3. No interruption for loan officers.',tel:'Mahindra Finance 3 GSA connectors 2 datacenters లో install చేసి "LOS-Connector-Group" లో group చేసింది. Connector-1 fail అయితే — GSA automatically Connector-2 కి switch అవుతుంది. Loan officers కి interruption లేదు.',result:'LOS system uptime: 99.97%. Zero business loss from connector failures. Loan processing uninterrupted 24/7.'}},
+  'security-profiles':{icon:'🔐',title:'Security profiles',tel:'భద్రత ప్రొఫైల్‌లు',path:'GSA > Secure > Security profiles',tag:'Policy',
+    en:'Named collections of security policies (firewall rules, web filtering, DLP, TLS inspection) assigned to users/groups as a reusable bundle.',
+    te:'వినియోగదారులు/గ్రూపులకు కేటాయించగల భద్రత విధానాల సమాహారాలు — firewall, web filtering, DLP, TLS inspection.',
+    subs:[],
+    ex:{scenario:'<b>Wipro – Different security needs for Developers, Finance staff, and Call Center agents.</b> Developers need access to GitHub, cloud consoles, and open internet. Finance staff need strict DLP. Call center agents need blocked social media. One-size-fits-all policy doesn\'t work.',use:'IT creates 3 Security Profiles: "Developer-Profile" (allow GitHub, cloud sites, relaxed web filter), "Finance-Profile" (strict DLP + no file uploads), "CallCenter-Profile" (block social media, gaming, streaming). Each profile assigned to the respective Entra group.',tel:'Wipro IT 3 Security Profiles సృష్టించింది: Developer-Profile (GitHub allow), Finance-Profile (strict DLP), CallCenter-Profile (social media block). ప్రతి Entra group కి corresponding profile assign.',result:'Security tailored to role. Developer productivity maintained. Finance DLP compliance achieved. Call center AHT improved 12%.'}},
+  'cloud-firewall':{icon:'🔥',title:'Cloud firewall policies',tel:'క్లౌడ్ ఫైర్‌వాల్ విధానాలు',path:'GSA > Secure > Cloud firewall policies',tag:'Security',
+    en:'Define layer-3/4 network firewall rules for internet-bound traffic through GSA. Allow or block by FQDN, IP, port, and protocol — enforced in the cloud, not on physical hardware.',
+    te:'GSA ద్వారా internet-bound ట్రాఫిక్‌కు layer-3/4 firewall నిబంధనలు నిర్వచించండి.',
+    subs:[],
+    ex:{scenario:'<b>BPCL (Bharat Petroleum) – OT/IT network security for 50 oil refineries.</b> Refinery control systems should NEVER communicate with internet IP ranges — only to specific approved vendor IPs for maintenance updates. A misconfigured firewall = potential refinery control compromise.',use:'BPCL configures Cloud Firewall policies: ALLOW only to vendor IPs (SAP: 185.x.x.x, Honeywell: 52.x.x.x), BLOCK all other outbound traffic on all ports except 443/80. The policy is enforced in GSA cloud — even if a local firewall is misconfigured, GSA is a second layer of defense.',tel:'BPCL Cloud Firewall లో refinery systems కి SAP మరియు Honeywell vendor IPs మాత్రమే allow. మిగతా internet traffic block. Local firewall misconfigured అయినా GSA second defense layer గా పనిచేస్తుంది.',result:'OT network cyber risk reduced 95%. Compliant with CERT-In OT security guidelines. Zero unauthorized outbound connections from refineries.'}},
+  'web-content-filtering':{icon:'🌐',title:'Web content filtering policies',tel:'వెబ్ కంటెంట్ ఫిల్టరింగ్ విధానాలు',path:'GSA > Secure > Web content filtering policies',tag:'Security',
+    en:'Block or allow web browsing by URL category — block Social Media, Adult Content, Malware sites. Different filtering levels for different user groups via security profiles.',
+    te:'URL వర్గం ద్వారా వెబ్ బ్రౌజింగ్ నిరోధించండి లేదా అనుమతించండి. వేర్వేరు user groups కి వేర్వేరు filtering స్థాయిలు.',
+    subs:[],
+    ex:{scenario:'<b>A private school chain (Delhi Horizon Schools) – 500 students using school-issued Chromebooks.</b> Students were accessing gaming sites, YouTube, and social media during online classes. Parents complained. The school needed content filtering without buying expensive proxy hardware.',use:'IT configures Web Content Filtering in GSA: Student profile blocks Gaming, Social Media, Adult, Entertainment categories during school hours (8AM–4PM). Teachers\' profile is unrestricted. Chromebooks get GSA client auto-installed via Intune.',tel:'Delhi Horizon Schools IT GSA Web Content Filtering configure చేసింది: Student profile — Gaming, Social Media, Entertainment sites 8AM-4PM block. Teacher profile — unrestricted. Chromebooks Intune ద్వారా GSA client auto-install.',result:'On-task time during online class: 60% → 91%. Parent complaints dropped to zero. No expensive proxy hardware needed.'}},
+  'file-policies':{icon:'📂',title:'File policies (Preview)',tel:'ఫైల్ విధానాలు (ప్రివ్యూ)',path:'GSA > Secure > File policies (Preview)',tag:'Preview',
+    en:'Preview: Define rules to control file uploads/downloads based on file type, size, or sensitivity labels. Prevent sensitive data from being uploaded to unauthorized cloud services.',
+    te:'ప్రివ్యూ: ఫైల్ రకం, పరిమాణం లేదా sensitivity labels ఆధారంగా file uploads/downloads నియంత్రించండి.',
+    subs:[],
+    ex:{scenario:'<b>Wipro Legal Team – Preventing confidential contracts from being uploaded to ChatGPT or personal cloud.</b> A paralegal accidentally uploaded a confidential client contract to ChatGPT for summarization — a serious data breach.',use:'IT configures File Policies (Preview): files with Microsoft Purview label "Confidential" or "Legal" are blocked from upload to any non-approved domain. Only approved.sharepoint.com and wipro-legal-vault.com are allowed destinations.',tel:'Wipro IT File Policies configure చేసింది: "Confidential" లేదా "Legal" labeled files ChatGPT, personal cloud కి upload block. Approved SharePoint మాత్రమే allow.',result:'Confidential document leak prevented. Legal data remains within approved systems. Paralegal received training. Zero recurrences.'}},
+  'prompt-policies':{icon:'💬',title:'Prompt policies (Preview)',tel:'ప్రాంప్ట్ విధానాలు (ప్రివ్యూ)',path:'GSA > Secure > Prompt policies (Preview)',tag:'Preview',
+    en:'Preview: Control and audit prompts sent to AI services (Copilot, ChatGPT, Gemini) through GSA. Prevent sensitive organizational data from being included in AI prompts to external services.',
+    te:'ప్రివ్యూ: AI సేవలకు పంపిన prompts నియంత్రించండి. సున్నితమైన డేటా బాహ్య AI కి వెళ్ళకుండా నిరోధించండి.',
+    subs:[],
+    ex:{scenario:'<b>TCS – Engineers pasting source code and client data into ChatGPT, Mumbai.</b> TCS engineers were pasting internal source code, architecture diagrams descriptions, and client project details into ChatGPT for help. This violates client NDAs and IP agreements.',use:'IT enables Prompt Policies: any prompts containing keywords like "client name", "internal project code", "API key" are flagged. Prompts containing source code (detected by code pattern) are blocked. All AI interactions are logged for the security team to review.',tel:'TCS IT Prompt Policies configure చేసింది: "client name", "API key", source code patterns ఉన్న prompts ChatGPT కి block. Security team weekly AI usage logs review చేస్తుంది.',result:'IP leakage via AI tools: zero. Client NDA compliance: maintained. Engineers redirected to internal Microsoft Copilot with enterprise data protection.'}},
+  'threat-protection':{icon:'🛡️',title:'Threat Protection policies',tel:'బెదిరింపు రక్షణ విధానాలు',path:'GSA > Secure > Threat Protection policies',tag:'Security',
+    en:'Detect and block malware, phishing, and command-and-control traffic in real time through GSA. Integrates with Microsoft\'s threat intelligence feeds.',
+    te:'GSA ద్వారా మాల్వేర్, ఫిషింగ్, C2 ట్రాఫిక్‌ను రియల్ టైమ్‌లో గుర్తించి నిరోధించండి.',
+    subs:[],
+    ex:{scenario:'<b>ICICI Bank – Ransomware attack attempt blocked in real time.</b> A bank employee clicks a phishing email link that attempts to download ransomware from a known malicious domain (flagged in Microsoft Threat Intel as active ransomware C2).',use:'GSA Threat Protection policy is active. The moment the employee\'s browser requests the malicious domain, GSA checks it against Microsoft Threat Intel in real time — matches a known C2 server — BLOCKS the connection. Browser shows "Connection blocked by security policy." Ransomware never downloads.',tel:'ICICI Bank ఉద్యోగి phishing link click చేసాడు. GSA Threat Protection policy ransomware C2 domain ని Microsoft Threat Intel తో real-time check చేసి BLOCK చేసింది. Ransomware download జరగలేదు.',result:'Ransomware attack neutralized in 12ms. Zero infection. Estimated damage prevented: ₹50+ crores in potential ransomware payout and recovery costs.'}},
+  dlp:{icon:'🚫',title:'Data Loss Prevention policies',tel:'డేటా నష్ట నివారణ విధానాలు',path:'GSA > Secure > Data Loss Prevention policies',tag:'Compliance',
+    en:'Define DLP policies that detect and prevent sensitive data (credit card numbers, Aadhaar numbers, medical records, source code) from leaving the organization through web traffic.',
+    te:'సున్నితమైన డేటా (credit card numbers, Aadhaar, medical records) వెబ్ ట్రాఫిక్ ద్వారా సంస్థ వదిలి వెళ్ళడాన్ని నిరోధించే DLP విధానాలు నిర్వచించండి.',
+    subs:[],
+    ex:{scenario:'<b>Apollo Hospitals – Preventing patient data from leaving the hospital network.</b> Doctors and staff were emailing patient medical records (lab reports, prescriptions with Aadhaar numbers) to personal Gmail accounts for "convenience." HIPAA + DPDP Act violation.',use:'IT configures GSA DLP policies: detect Aadhaar number patterns (12-digit) and ICD-10 medical codes in outbound web traffic. If detected in a Gmail attachment upload or form post — BLOCK and alert the security team with the user\'s name and timestamp.',tel:'Apollo Hospitals GSA DLP policy configure చేసింది: Aadhaar number patterns మరియు ICD-10 codes outbound traffic లో detect అవుతే — Gmail upload BLOCK. Security team కి user name + timestamp తో alert.',result:'Patient data leakage: zero. DPDP Act compliance: achieved. 14 policy violations detected and blocked in first month.'}},
+  'tls-inspection':{icon:'🔍',title:'TLS inspection policies',tel:'TLS తనిఖీ విధానాలు',path:'GSA > Secure > TLS inspection policies',tag:'Security',
+    en:'Configure SSL/TLS interception to inspect encrypted HTTPS traffic for threats. Define which domains to inspect and which to bypass (banking, healthcare).',
+    te:'Encrypted HTTPS ట్రాఫిక్‌ను threats కోసం inspect చేయడానికి TLS inspection కాన్ఫిగర్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>Cognizant SOC – Malware hiding in encrypted HTTPS traffic to evade detection.</b> Modern malware uses HTTPS for C2 communications knowing corporate firewalls don\'t inspect encrypted traffic. SOC\'s signature-based tools are blind to HTTPS threats.',use:'IT enables TLS inspection for all traffic except bypass categories: banking (netbanking.sbi.co.in), healthcare (apollohospitals.com), HR portals. For everything else, GSA decrypts, inspects for threats, re-encrypts, and forwards. Malware C2 in HTTPS is now visible.',tel:'Cognizant IT TLS inspection enable చేసింది — banking, healthcare sites bypass. మిగతా HTTPS traffic decrypt → inspect → re-encrypt. HTTPS లో దాగున్న malware C2 traffic ఇప్పుడు visible అవుతుంది.',result:'3 malware C2 connections detected in first week that were previously invisible. 2 compromised laptops identified and quarantined.'}},
+  'threat-intel':{icon:'🕵️',title:'Threat intelligence policies',tel:'బెదిరింపు నిఘా విధానాలు',path:'GSA > Secure > Threat intelligence policies',tag:'Security',
+    en:'Automatically block known malicious IPs, domains, and URLs using Microsoft\'s global threat intelligence — continuously updated as new threats are identified.',
+    te:'తెలిసిన హానికరమైన IPs, domains, URLs ని స్వయంచాలకంగా block చేయడానికి Microsoft threat intelligence ఉపయోగించండి.',
+    subs:[],
+    ex:{scenario:'<b>SBI – Protecting 5 crore online banking users from new phishing domains.</b> Cybercriminals register new look-alike domains like "sbi-netbanking-secure.com" daily to phish SBI customers. Blacklists are always 24–48 hours behind.',use:'SBI\'s corporate users (IT staff, branch managers) all have GSA. Microsoft Threat Intelligence blocks newly discovered phishing domains within minutes of their discovery globally — updated in real time. "sbi-netbanking-secure.com" is in the threat feed within 6 hours of first being seen worldwide.',tel:'SBI IT staff కి GSA Threat Intelligence policies enable. Microsoft నిరంతరం phishing domains track చేసి — newly discovered domains 6 గంటలలో globally block అవుతాయి. Traditional blacklist 48 గంటలు lag — Microsoft Threat Intel 6 గంటలు.',result:'SBI staff phishing protection: near real-time. New phishing domain exposure window: 48 hours → 6 hours.'}},
+  'traffic-logs':{icon:'📋',title:'Traffic logs',tel:'ట్రాఫిక్ లాగ్‌లు',path:'GSA > Monitor > Traffic logs',tag:'Monitoring',
+    en:'View detailed logs of all network traffic through GSA — user, device, destination, protocol, bytes, action (allowed/blocked), and applied policy. Essential for troubleshooting and investigations.',
+    te:'GSA ద్వారా ప్రవహించే అన్ని నెట్‌వర్క్ ట్రాఫిక్ లాగ్‌లు చూడండి.',
+    subs:[],
+    ex:{scenario:'<b>TCS Security team investigating a data exfiltration incident, Chennai.</b> An alert fires: 8GB of data left the network in 2 hours on a Sunday night. No one should be working. Who sent what, where?',use:'Security opens GSA Traffic Logs, filters by Sunday 10PM–midnight, sorts by bytes_sent DESC. Top result: user "ramesh.k@tcs.com", device "TCSLT-5521", destination "mega.nz" (personal cloud), 8.1GB transferred. All evidence in one view.',tel:'TCS Security team GSA Traffic Logs లో Sunday night filter చేసింది: ramesh.k@tcs.com, device TCSLT-5521, mega.nz కి 8.1GB transfer. Complete forensic evidence ఒకే view లో.',result:'Insider data theft discovered within 15 minutes. Employee account suspended. Legal proceedings initiated with full log evidence.'}},
+  'gen-ai-logs':{icon:'🤖',title:'Gen AI Insights logs',tel:'Gen AI అంతర్దృష్టి లాగ్‌లు',path:'GSA > Monitor > Gen AI Insights logs',tag:'AI Monitoring',
+    en:'Capture and analyze prompts/responses sent to AI services (Copilot, ChatGPT, Gemini) through GSA. Identify sensitive data exposure and ensure AI policy compliance.',
+    te:'GSA ద్వారా AI సేవలకు పంపిన prompts మరియు responses log చేయండి. Sensitive data exposure గుర్తించండి.',
+    subs:[],
+    ex:{scenario:'<b>Wipro Legal – Monthly AI usage review to ensure no client IP leakage via ChatGPT.</b> As AI tool adoption grew, legal department must prove to clients: "None of your confidential data was shared with external AI services."',use:'Compliance officer opens Gen AI Insights Logs, filters for Legal department users, reviews prompts sent to ChatGPT. Finds 3 prompts containing project code names. They were allowed (no Confidential label) but flagged for a training conversation with the employees involved.',tel:'Wipro Legal compliance officer Gen AI Insights Logs review చేస్తే — 3 prompts లో project code names కనిపించాయి. Confidential label లేకపోవడంతో block కాలేదు కానీ employees కి training provided.',result:'Client audit passed: zero confidential data in AI logs. 3 employees received AI usage training. Policy updated to add project codes to DLP watchlist.'}},
+  'audit-logs':{icon:'📒',title:'Audit logs',tel:'ఆడిట్ లాగ్‌లు',path:'GSA > Monitor > Audit logs',tag:'Compliance',
+    en:'Comprehensive record of all administrative changes in GSA — who changed what policy, when, and from where. Critical for compliance and incident investigations.',
+    te:'GSA లో అన్ని నిర్వాహక మార్పుల సమగ్ర రికార్డు. సమ్మతి ఆడిట్‌లకు క్లిష్టమైనది.',
+    subs:[],
+    ex:{scenario:'<b>HDFC Bank – SOC investigating why a critical DLP policy was disabled overnight.</b> Monday morning: 500MB of data left the network to personal email. SOC checks — the DLP policy is disabled! Who did it, and when?',use:'GSA Audit Logs show: Sunday 11:43 PM, admin "rohan.mehta@hdfc.com" from IP 103.x.x.x (outside office) disabled DLP policy "Block-PII-Upload." Security immediately escalates — Rohan\'s account was compromised. The attacker disabled DLP, exfiltrated data, then tried to cover tracks.',tel:'HDFC SOC GSA Audit Logs లో: Sunday 11:43 PM, rohan.mehta@hdfc.com IP 103.x.x.x నుండి DLP policy disable చేసాడు. Rohan account compromise confirm చేసి immediate action తీసుకున్నారు.',result:'Attack chain reconstructed in 10 minutes. Compromised account suspended. DLP policy re-enabled. Forensic evidence preserved for legal action.'}},
+  alerts:{icon:'🔔',title:'Alerts',tel:'హెచ్చరికలు',path:'GSA > Monitor > Alerts',tag:'Monitoring',
+    en:'Configure and view security alerts for anomalous patterns in GSA traffic — unusual data volumes, new destinations, policy violation spikes, or threat intelligence matches.',
+    te:'GSA ట్రాఫిక్‌లో అసాధారణ నమూనాల హెచ్చరికలు కాన్ఫిగర్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>Infosys SOC – Detecting unusual off-hours data transfer automatically.</b> The SOC team cannot monitor 1,000 users manually 24/7. They need automated alerts when something suspicious happens.',use:'IT configures GSA Alerts: "Alert when user data transfer > 2GB in 30 min outside 9AM-7PM." On Friday at 11PM, alert fires for user "dev.anand@infosys.com" — 3.4GB to an unknown IP. SOC investigates immediately — turns out to be legitimate backup. But the alert worked perfectly.',tel:'Infosys IT GSA Alert configure చేసింది: 9AM-7PM బయట 30 నిమిషాలలో 2GB+ transfer అయితే alert. Friday 11PM — dev.anand@infosys.com 3.4GB transfer — SOC investigate చేసి legitimate backup confirm చేసింది.',result:'SOC coverage extended to 24/7 with automated alerts. Mean time to detect (MTTD) for anomalies: 4 hours → 3 minutes.'}},
+  'client-events':{icon:'📱',title:'Client events',tel:'క్లయింట్ ఈవెంట్‌లు',path:'GSA > Monitor > Client events',tag:'Monitoring',
+    en:'View events from the GSA client agent on end-user devices — connection status, tunnel establishment, policy application, health checks, and errors.',
+    te:'వినియోగదారు పరికరాలలో GSA client నుండి ఈవెంట్‌లు చూడండి — connection స్థితి, tunnel establishment.',
+    subs:[],
+    ex:{scenario:'<b>Wipro IT Helpdesk – Employee reports "I can\'t access the internal app" but their GSA shows connected.</b> An employee in Pune can\'t reach the internal ServiceNow portal. They say "GSA shows green" — but something isn\'t working.',use:'Helpdesk opens Client Events for the employee\'s device. They see: GSA connected ✓, but Policy Application shows error "Private Access profile not assigned." The user was moved to a new Entra group last week that doesn\'t have the Private Access profile. IT fixes the group assignment — issue resolved in 3 minutes.',tel:'Wipro helpdesk GSA Client Events చూసింది: GSA connected ✓ కానీ "Private Access profile not assigned" error. User కి profile assign లేదు. Group assignment fix చేయగా issue resolved.',result:'MTTR (Mean Time to Resolve) for this type of issue: 45 min → 3 min with Client Events visibility.'}},
+  'deployment-logs':{icon:'🚀',title:'Deployment logs',tel:'డిప్లాయ్‌మెంట్ లాగ్‌లు',path:'GSA > Monitor > Deployment logs',tag:'Operations',
+    en:'Track deployment and update status of GSA client agents across your device fleet — which have the latest version, which failed to update.',
+    te:'మీ device fleet అంతటా GSA client deployment మరియు update status ట్రాక్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>TCS IT – Rolling out GSA client v3.2 update to 60,000 laptops globally.</b> A new GSA client version fixes a critical security vulnerability. IT needs to confirm deployment is complete within 72 hours (CERT-In requirement).',use:'Deployment Logs show real-time status: 58,421 devices updated (97.4%), 1,579 failed. Drill down: 892 failed because "device offline > 7 days" (employees on leave), 687 failed due to "insufficient disk space." IT sends disk cleanup notification and waits for offline devices.',tel:'TCS IT Deployment Logs లో: 97.4% devices updated. 1,579 failures — 892 offline, 687 disk space. IT targeted notifications పంపింది. 72 గంటలలో 99.1% coverage achieved.',result:'Critical vulnerability patched on 99.1% devices within 72 hours. CERT-In compliance reported. Remaining 0.9% are on approved leave.'}},
+  'm365-logs':{icon:'📊',title:'Enriched M365 logs',tel:'మెరుగుపడిన M365 లాగ్‌లు',path:'GSA > Monitor > Enriched M365 logs',tag:'Monitoring',
+    en:'M365 activity logs enriched with GSA network context — correlate M365 actions (SharePoint access, Teams, Exchange) with the network path and security signals from GSA.',
+    te:'GSA నెట్‌వర్క్ context తో మెరుగుపడిన M365 కార్యాచరణ లాగ్‌లు.',
+    subs:[],
+    ex:{scenario:'<b>ICICI Bank SOC – Correlating a suspicious SharePoint download with network signals.</b> Standard M365 audit log shows: "user downloaded 200 files from SharePoint." Is this normal? The SOC needs more context.',use:'Enriched M365 Logs add the GSA network layer: same event shows — user was on an unknown device, connected through a residential Jio IP (not the office or known home IP), no MFA challenge was raised (session token stolen). Full attack chain now visible from one log entry.',tel:'ICICI SOC Enriched M365 Logs లో SharePoint download event — unknown device, residential Jio IP, MFA లేదు (session token stolen). Full attack chain ఒకే log entry లో visible.',result:'Stolen session token attack detected. Account terminated. 200 files were downloaded but encrypted at rest — no data breach. Incident report filed with RBI.'}},
+  'remote-health-logs':{icon:'💓',title:'Remote network health logs',tel:'రిమోట్ నెట్‌వర్క్ ఆరోగ్య లాగ్‌లు',path:'GSA > Monitor > Remote network health logs',tag:'Operations',
+    en:'Monitor health and performance of IPsec tunnels connecting branch sites to GSA — uptime, latency, packet loss, bandwidth, and IKE negotiation events.',
+    te:'branch sites ని GSA కి అనుసంధానించే IPsec tunnels ఆరోగ్యం మరియు పనితీరు పర్యవేక్షించండి.',
+    subs:[],
+    ex:{scenario:'<b>HDFC Bank – Branch in Nagpur reporting slow internet access, affecting loan processing.</b> The Nagpur branch manager calls IT: "Everything is slow since yesterday. Employees can\'t process loans." IT needs to diagnose the IPsec tunnel health remotely.',use:'IT opens Remote Network Health Logs, finds Nagpur branch tunnel. Data shows: packet loss 14% (normal <1%), latency 280ms (normal 20ms), IKE re-negotiations happening every 4 minutes (sign of flapping). IT contacts the branch ISP — confirms they have a fiber cut with failover to degraded 4G backup.',tel:'HDFC IT Remote Network Health Logs లో Nagpur tunnel: 14% packet loss, 280ms latency, IKE re-negotiations every 4 min. ISP contact చేయగా fiber cut + degraded 4G failover confirm.',result:'Root cause identified in 8 minutes remotely. ISP dispatched. Branch fully restored in 4 hours. No IT travel to Nagpur required.'}},
+  workbooks:{icon:'📗',title:'Workbooks',tel:'వర్క్‌బుక్‌లు',path:'GSA > Monitor > Workbooks',tag:'Analytics',
+    en:'Pre-built and customizable Azure Monitor Workbooks that visualize GSA telemetry — traffic analysis, threat hunting, and capacity planning dashboards.',
+    te:'GSA telemetry డేటాను దృశ్యమానం చేసే Azure Monitor Workbooks — ట్రాఫిక్ విశ్లేషణ, threat hunting డ్యాష్‌బోర్డ్‌లు.',
+    subs:[],
+    ex:{scenario:'<b>Accenture CISO – Monthly Board-level security report on network threat trends.</b> The CISO needs to present a visual security report to the board: threats blocked, top risky users, bandwidth trends, policy violations — in 5 minutes of prep time.',use:'CISO opens the GSA "Threat Summary Workbook" — pre-built charts show: 847 threats blocked this month (↓12% vs last month), top 5 risky users (with drill-down), bandwidth trend by country, top blocked categories. Export to PDF in one click. Board presentation ready.',tel:'Accenture CISO GSA "Threat Summary Workbook" తెరిచింది — 847 threats blocked, top 5 risky users, bandwidth trends, blocked categories. One-click PDF export. Board presentation 5 నిమిషాలలో ready.',result:'Board presentation prepared in 5 minutes instead of 2 days. CISO rated security reporting as "most improved process of the year."'}},
+  'session-mgmt':{icon:'🔐',title:'Session management',tel:'సెషన్ నిర్వహణ',path:'GSA > Settings > Session management',tag:'Security',
+    en:'Configure authenticated session lifetimes in GSA — how long sessions stay valid before re-auth, token lifetime policies, and continuous access evaluation settings.',
+    te:'GSA authenticated sessions ఎంత కాలం చెల్లుతాయో కాన్ఫిగర్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>Axis Bank – RBI requirement that banking admin sessions expire after 15 minutes of inactivity.</b> RBI circular mandates: "Privileged admin sessions to banking systems must auto-terminate after 15 minutes of inactivity." Currently sessions last 8 hours.',use:'IT configures Session Management in GSA: admin users with "Banking-Admin" group get a 15-minute inactivity timeout. Regular employees get 60 minutes. Finance portal gets continuous access evaluation — if the user\'s risk score changes during a session (e.g., sign-in from new IP), the session is immediately revoked.',tel:'Axis Bank GSA Session Management: Banking-Admin group → 15 min timeout (RBI compliance). Regular employees → 60 min. Finance portal → Continuous Access Evaluation (risk change = immediate session revoke).',result:'RBI compliance achieved. Admin session idle timeout working. Zero long-lived admin sessions. Continuous Access Evaluation detected 1 session takeover attempt.'}},
+  'get-started':{icon:'🚀',title:'Get Started (3rd Party)',tel:'ప్రారంభించండి',path:'GSA > Third Party Security Solutions > Get Started',tag:'Partners',
+    en:'Onboarding guide for integrating third-party security vendors with GSA. Step-by-step instructions to connect external SIEM, CASB, or endpoint security tools.',
+    te:'GSA తో థర్డ్-పార్టీ భద్రత విక్రేతలను అనుసంధానించడానికి onboarding మార్గదర్శి.',
+    subs:[],
+    ex:{scenario:'<b>HCL Technologies – Integrating existing Splunk SIEM with GSA for unified SOC visibility.</b> HCL has invested ₹2 crores in Splunk SIEM. They want GSA logs to flow into Splunk automatically so the SOC has a single pane of glass.',use:'IT uses the GSA Get Started guide for "SIEM Integration." It walks through: configure GSA to stream logs to Azure Event Hub → configure Splunk Add-on for Azure → GSA logs appear in Splunk dashboards. All 8 steps documented with screenshots.',tel:'HCL IT GSA Get Started guide ఉపయోగించి Splunk SIEM integration: GSA logs → Azure Event Hub → Splunk. SOC కి unified view అందుబాటులో వచ్చింది.',result:'SOC single-pane-of-glass achieved. Mean time to correlate incidents across GSA + Splunk: 40 min → 5 min.'}},
+  marketplace:{icon:'🛒',title:'Marketplace',tel:'మార్కెట్‌ప్లేస్',path:'GSA > Third Party Security Solutions > Marketplace',tag:'Partners',
+    en:'Browse third-party security solutions certified to integrate with Microsoft Entra — identity, network, endpoint, and cloud security products.',
+    te:'Microsoft Entra తో అనుసంధానమయ్యే థర్డ్-పార్టీ భద్రత పరిష్కారాలు బ్రౌజ్ చేయండి.',
+    subs:[],
+    ex:{scenario:'<b>Infosys CISO – Evaluating a Zero Trust Network Access add-on from a Palo Alto Networks partner.</b> Infosys wants to extend GSA with Palo Alto\'s Prisma Access for additional layer-7 app inspection — but needs to confirm it\'s a certified Microsoft Entra integration.',use:'CISO opens GSA Marketplace, searches "Palo Alto." Finds the certified integration listing with: integration overview, supported features, partner contact, pricing guide, and a direct "Get it now" button to start the trial.',tel:'Infosys CISO GSA Marketplace లో "Palo Alto" search చేసి — certified integration listing తో overview, features, pricing, "Get it now" button చూసింది. Procurement process accelerated.',result:'Procurement team contacted Palo Alto directly from Marketplace. Certified integration confirmed before purchase — no compatibility surprises.'}},
+  offers:{icon:'🎁',title:'Offers',tel:'ఆఫర్‌లు',path:'GSA > Third Party Security Solutions > Offers',tag:'Partners',
+    en:'View special pricing offers, trial offers, and promotional bundles from Microsoft security partners available through the Entra marketplace.',
+    te:'Microsoft భద్రత భాగస్వాముల నుండి ప్రత్యేక ధర ఆఫర్‌లు, ట్రయల్‌లు చూడండి.',
+    subs:[],
+    ex:{scenario:'<b>A mid-sized IT company (500 employees) evaluating Silverfort MFA for OT systems via Entra Marketplace.</b> They need strong authentication for industrial control systems but budget is tight — full licenses are expensive.',use:'IT opens Offers in GSA Marketplace — finds Silverfort offering 90-day free trial for up to 200 users + 20% discount if they purchase within trial. They start the trial, test with 50 OT system accounts, confirm it works with their SCADA systems, then purchase with the discount.',tel:'500 employees IT company Offers లో Silverfort 90-day trial + 20% discount offer కనుగొంది. Trial → test → purchase — all within Entra Marketplace.',result:'OT system MFA deployed at 20% savings. Trial de-risked the purchase decision. IT completed procurement in 2 weeks instead of 3 months of vendor negotiations.'}},
+  'whats-new':{icon:'🆕',title:"What's new",tel:'కొత్తగా వచ్చినవి',path:"Microsoft Entra admin center > What's new",tag:'Updates',
+    en:"Stay current with latest Microsoft Entra feature releases, previews, and deprecations. Review monthly announcements and upcoming breaking changes.",
+    te:'తాజా Microsoft Entra ఫీచర్ విడుదలలు, ప్రివ్యూలు మరియు deprecations తో తాజాగా ఉండండి.',
+    subs:[],
+    ex:{scenario:'<b>Wipro Identity Team – Ensuring no surprise breaking changes affect 60,000 users.</b> Microsoft announced that legacy authentication protocols (Basic Auth for Exchange) will be disabled on a specific date. Wipro\'s identity team missed the announcement — 200 users still use legacy Outlook 2010.',use:'The team checks What\'s New regularly and sees the deprecation notice with 90-day warning. They run a usage report, find 200 users on Outlook 2010, and upgrade them to Outlook 365 before the deadline. Zero disruption.',tel:'Wipro identity team "What\'s New" లో Basic Auth deprecation 90-day warning notice చూసింది. Usage report run చేసి 200 Outlook 2010 users identify చేసి deadline కి ముందే upgrade చేసింది.',result:'Zero users impacted on cutoff day. No business disruption. Proactive management saved an estimated 800 IT support calls.'}},
+  licenses:{icon:'💳',title:'Licenses',tel:'లైసెన్స్‌లు',path:'Billing > Licenses',tag:'Billing',
+    en:'View and manage Microsoft Entra and Azure AD license assignments across your tenant — Entra ID P1, P2, Entra Governance, and Microsoft 365 license usage vs available seats.',
+    te:'మీ tenant అంతటా Microsoft Entra లైసెన్స్ కేటాయింపులు చూడండి మరియు నిర్వహించండి.',
+    subs:[],
+    ex:{scenario:'<b>Infosys Finance team – Optimizing ₹3 crore/year Microsoft licensing spend.</b> Infosys pays for 50,000 Entra ID P2 licenses but the IT team suspects many are assigned to users who don\'t use PIM or Identity Protection — pure waste.',use:'Licenses view shows: 50,000 P2 assigned, but only 12,000 users have actually activated PIM or used Identity Protection features. Finance and IT together reassign 32,000 P2 licenses to P1 — saving ₹1.4 crore/year while keeping P2 only for admins and high-risk users.',tel:'Infosys Licenses view లో: 50,000 P2 assigned, 12,000 మాత్రమే P2 features వాడుతున్నారు. 32,000 ని P1 కి downgrade చేయగా ₹1.4 crore/year savings.',result:'Annual license savings: ₹1.4 crores. Right-licensed users: 100%. No loss of functionality for users who need P2.'}},
+  trials:{icon:'🧪',title:'Trials',tel:'ట్రయల్‌లు',path:'Billing > Trials',tag:'Billing',
+    en:'Start and manage free trials of Microsoft Entra features — Entra ID P2, Entra Governance, Global Secure Access — before committing to full licenses.',
+    te:'full licenses కి commit చేయడానికి ముందు Microsoft Entra features యొక్క ఉచిత trials ప్రారంభించండి.',
+    subs:[],
+    ex:{scenario:'<b>A 200-person Hyderabad startup evaluating Entra ID P2 before budgeting.</b> The CISO wants to implement PIM and Identity Protection but needs to prove the value to the CFO before committing to ₹15L/year in P2 licenses.',use:'IT starts a 30-day Entra ID P2 trial from the Trials section. They configure PIM for 5 admins, Identity Protection for all users. In 30 days: 3 risky sign-ins detected, 2 PIM activations audited. CISO presents data to CFO — ROI clear. CFO approves licenses.',tel:'Hyderabad startup IT Trials section లో Entra ID P2 30-day trial start చేసింది. 30 రోజులలో: 3 risky sign-ins, 2 PIM activations evidence తో CISO CFO ని convince చేసింది. Budget approved.',result:'ROI proven in 30 days. Licenses purchased. CFO said "Best trial-to-purchase decision this year."'}},
+  diagnose:{icon:'🔧',title:'Diagnose & solve problems',tel:'సమస్యలు నిర్ధారించు',path:'Microsoft Entra admin center > Diagnose & solve problems',tag:'Support',
+    en:'Built-in troubleshooting guides and diagnostics for common Entra ID issues — sign-in failures, MFA problems, conditional access blocks, provisioning errors, and more.',
+    te:'Entra ID సాధారణ సమస్యలకు నిర్మించిన troubleshooting మార్గదర్శులు — sign-in failures, MFA సమస్యలు, provisioning errors.',
+    subs:[],
+    ex:{scenario:'<b>IT Helpdesk at Mindtree – Employee can\'t sign in to Salesforce after Conditional Access was changed.</b> Employee Priya calls helpdesk: "I can\'t access Salesforce since this morning. I get an error about policy." Helpdesk agent doesn\'t know where to start.',use:'Helpdesk opens Diagnose & Solve Problems → "Sign-in and Multi-Factor Authentication" → enters Priya\'s UPN and the time of failure. Diagnostic runs automatically and shows: "Conditional Access policy \'Require-Compliant-Device\' blocked sign-in. Device \'MINDTLT-3421\' is not compliant."',tel:'Mindtree helpdesk "Diagnose & solve problems" → Sign-in diagnostics లో Priya UPN enter చేసింది. Result: "Require-Compliant-Device" policy block — device non-compliant. Root cause 90 seconds లో identified.',result:'Root cause found in 90 seconds instead of 45 minutes of log diving. Intune compliance issue fixed. Priya back in Salesforce in 15 minutes total.'}},
+  'new-support':{icon:'🎫',title:'New support request',tel:'నూతన మద్దతు అభ్యర్థన',path:'Microsoft Entra admin center > New support request',tag:'Support',
+    en:'Raise a formal Microsoft support ticket directly from the Entra admin center. Automatically captures tenant diagnostics and recommended solutions before connecting to a Microsoft support engineer.',
+    te:'Entra admin center నుండి నేరుగా Microsoft support ticket raise చేయండి. Tenant diagnostics స్వయంచాలకంగా capture చేయబడతాయి.',
+    subs:[],
+    ex:{scenario:'<b>TCS hitting an Azure AD B2C limits issue affecting their customer app serving 5 lakh users.</b> TCS\'s customer-facing app suddenly throws errors. IT diagnoses: Azure AD B2C hitting the token issuance rate limit — 20,000 authentications/hour vs their load of 25,000/hour during peak hours.',use:'IT opens New Support Request directly from Entra admin center. The portal automatically attaches tenant ID, B2C configuration, error logs, and the exact rate limit hit timestamps. Support ticket reaches Microsoft\'s priority queue with Severity A (production impact). Microsoft engineer calls back in 47 minutes.',tel:'TCS Entra "New Support Request" submit చేసింది — tenant ID, B2C config, error logs automatically attached. Severity A (production impact) ticket Microsoft priority queue కి వెళ్ళింది. 47 minutes లో Microsoft engineer call back.',result:'Rate limit increase approved in 2 hours. Customer app restored. 5 lakh users unimpacted after 90-minute incident. Support SLA: met.'}}
+};
+
+let teluguOn = false;
+
+function toggleTelugu(){
+  teluguOn = !teluguOn;
+  document.body.classList.toggle('tel-on', teluguOn);
+  document.getElementById('b3').textContent = teluguOn ? '🔤 Hide Telugu / దాచు' : '🔤 తెలుగు చూపు / Show Telugu';
+}
+
+function setBtn(n){
+  [1,2,3].forEach(i=>document.getElementById('b'+i).classList.remove('active-btn'));
+  document.getElementById('b'+n).classList.add('active-btn');
+  if(n===1){
+    document.getElementById('view-welcome').style.display='block';
+    document.getElementById('detailContainer').style.display='none';
+  }
+}
+
+function showDetail(key){
+  const d = DATA[key];
+  if(!d) return;
+  document.getElementById('view-welcome').style.display='none';
+  const dc = document.getElementById('detailContainer');
+  dc.style.display='block';
+
+  let subsHtml = '';
+  if(d.subs && d.subs.length){
+    subsHtml = `<div class="sub-cards">${d.subs.map(s=>`
+      <div class="sub-card">
+        <div class="sc-title">${s.t}</div>
+        <div class="sc-tel">${s.tt}</div>
+        <div class="sc-desc">${s.d}</div>
+        <div class="sc-desc-tel">${s.dt}</div>
+      </div>`).join('')}</div>`;
+  }
+
+  let exHtml = '';
+  if(d.ex){
+    exHtml = `<div class="detail-body" style="border-left:4px solid #ffd166;margin-top:0">
+      <h3 style="color:#ffd166">🏢 Real-World Example / నిజ సంస్థ ఉదాహరణ</h3>
+      <div class="ex-scenario"><span class="ex-label">🏛️ Scenario</span>${d.ex.scenario}</div>
+      <div class="ex-block"><span class="ex-label">⚙️ How it's used</span>${d.ex.use}</div>
+      <div class="ex-block ex-tel"><span class="ex-label" style="color:#ffd166">📖 తెలుగు వివరణ</span>${d.ex.tel}</div>
+      ${d.ex.steps ? `<div class="ex-steps"><span class="ex-label">📋 Steps taken</span><ol>${d.ex.steps.map(s=>`<li>${s}</li>`).join('')}</ol></div>` : ''}
+      ${d.ex.result ? `<div class="ex-result"><span>✅ Result: </span>${d.ex.result}</div>` : ''}
+    </div>`;
+  }
+
+  dc.innerHTML = `
+    <div class="detail show">
+      <div class="detail-header">
+        <div class="dh-icon">${d.icon}</div>
+        <div class="dh-info">
+          <h2>${d.title}</h2>
+          <div class="dh-tel">${d.tel}</div>
+          <div class="dh-path">📍 ${d.path}</div>
+          <span class="dh-tag">${d.tag}</span>
+        </div>
+      </div>
+      <div class="detail-body">
+        <h3>📘 What is this? / ఇది ఏమిటి?</h3>
+        <div class="desc-en">${d.en}</div>
+        <div class="desc-tel">${d.te}</div>
+        ${subsHtml}
+      </div>
+      ${exHtml}
+    </div>`;
+
+  // highlight active in sidebar
+  document.querySelectorAll('.sub-nav-item,.nav-item,.deep-nav-item').forEach(el=>el.classList.remove('active'));
+  setBtn(2);
+  dc.scrollTop=0;
+  dc.parentElement.scrollTop=0;
+}
+
+function toggleSection(id){
+  const body = document.getElementById(id+'-body');
+  const hdr = document.getElementById(id+'-hdr');
+  if(!body) return;
+  if(body.style.maxHeight==='0px'){
+    body.style.maxHeight='2000px';
+    hdr.classList.remove('closed');hdr.classList.add('open');
+  } else {
+    body.style.maxHeight='0px';
+    hdr.classList.remove('open');hdr.classList.add('closed');
+  }
+}
+</script>
+</body>
+</html>
